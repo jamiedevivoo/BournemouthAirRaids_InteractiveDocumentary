@@ -49,7 +49,7 @@ $(document).ready(function(){  // Makes sure nothing is done until the 'DOM' (Do
 				introImages();
 				var introImagesInterval = setInterval(introImages, 4100);
 	
-	//Hello wor
+	
 				$('.intro').delay(15000).fadeOut(1000, function () {
 					clearInterval(pulsingInterval);
 					clearInterval(introImagesInterval);
