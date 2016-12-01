@@ -26,9 +26,8 @@ header {
 .timetravel h3 {
 	font-size: 60px;	
 }
-.newmap {
-	background-image:url(../images/newmap.png);
-	background-size: cover;
+
+.map {
 	background-position: 100% 50%;
 	position: absolute;
 	width: 100vw;
@@ -36,17 +35,26 @@ header {
 	top: 0;
 	left: 0;
 }
+.minimap {
+	 width: 15vw;
+	 height: 15vh;
+	 top: 0;
+	 left: 0;
+	 margin: 20px;
+	 position: absolute;
+	 z-index: 999;
+	 border-radius: 100px;
+	 border: solid thick black;
+}
+.newmap {
+	background-image:url(../images/newmap.png);
+	background-size: cover;
+}
 .oldmap {
 	background-image:url(../images/oldmap.png);
 	background-size: 100% 100%;
-	background-position: 100% 50%;
 	box-shadow: 40px 40px 80px #000 inset,-40px -40px 80px #000 inset;
-	position: absolute;
-	width: 100vw;
-	height: 100vh;
-	top: 0;
-	left: 0;
-}	
+}
 .centered {
 	position: absolute;
 	margin: 0 auto;
@@ -144,9 +152,9 @@ a.skipIntro:hover {
 	height: 100vh;
 	width: 100vw;
 	position: fixed;
-	background-color: rgba(0,0,0,0.90);
 	display: none;	
-	z-index: 999;
+	z-index: 200;
+	color: #000;
 }
 .fullStory h2 {
 	color: #fff;

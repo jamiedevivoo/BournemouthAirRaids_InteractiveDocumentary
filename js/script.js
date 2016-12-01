@@ -111,29 +111,32 @@ $(document).ready(function(){  // Makes sure nothing is done until the 'DOM' (Do
 		
 	// ------------------------------------------------------------------------------  MAP ZOOM ANIMATION
 	
-		var zoomed = 0; 
-	
-		$(".story h3").click(function() {
+		var zoomed = 0; 																					// Default set variable 'zoomed' to 0 (no);
 			
-			$('.tip').fadeOut(500);
+		$(".story h3").click(function() {																	// When you click on the title of a story
+			
+			$('.tip').fadeOut(500);																			// fade out the tip.
 				
-			if  (zoomed === 0) {
+			if  (zoomed === 0) {																			// check if map is already zoomed in
 				
-				var percX = event.pageX / $('.oldmap').width() * 100;
-				var percY = event.pageY / $('.oldmap').height() * 100;
+				// set a new variable called 'percX' and 'percY' to the position of the click so we can change that to the center position of the map when we zoom
+				var percX = (event.pageX / $('.map').width()) * 100;																	
+				var percY = (event.pageY / $('.map').height()) * 100;										
 				
-				$('.story h3').css('display','none');
-				$('.oldmap').css("box-shadow", "0px 0px 0px #000 inset,0px 0px 0px #000 inset");
-				$('.oldmap').css("background-position", percX+"% " + percY + "% ");
-				$('.oldmap').css("background-size", "200% 200%");
-				$(this).siblings(".fullStory").fadeIn(500);
-				zoomed = 1;
+				$('.story h3').css('display','none');														// Hide the title of the story.
+				$('.oldmap').css("box-shadow", "0px 0px 0px #000 inset,0px 0px 0px #000 inset");			 // Remove the 	vignetting on the div
+				$('.oldmap').css("background-position", percX+"% " + percY + "% ");						 // center the image where the user clicked
+				$('.oldmap').css("background-size", "200% 200%");											// zoom in 200%
+				$('.oldmap').removeClass('map').addClass('minimap');										// remove map class and add minimap class
+				$(this).siblings(".fullStory").fadeIn(500);												// create full video
+				zoomed = 1;																					// Set zoomed to 1 (yes)
 				
 			} else {
 				$(this).siblings(".fullStory").fadeOut(500);
 				$('.oldmap').css("background-position", "100% 50%");
 				$('.oldmap').css("background-size", "100% 100%");
 				$('.oldmap').css("box-shadow", "40px 40px 80px #000 inset,-40px -40px 80px #000 inset");
+				$('.oldmap').removeClass('minimap').addClass('map');										// remove map class and add minimap class
 				$('.story h3').fadeIn(100);
 				zoomed = 0;
 			}
@@ -144,6 +147,7 @@ $(document).ready(function(){  // Makes sure nothing is done until the 'DOM' (Do
 			$('.oldmap').css("background-position", "100% 50%");
 			$('.oldmap').css("background-size", "100% 100%");
 			$('.oldmap').css("box-shadow", "40px 40px 80px #000 inset,-40px -40px 80px #000 inset");
+			$('.oldmap').removeClass('minimap').addClass('map');										// remove map class and add minimap class
 			$('.story h3').fadeIn(500);
 			zoomed = 0;				
 		});
