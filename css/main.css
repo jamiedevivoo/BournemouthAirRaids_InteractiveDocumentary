@@ -1,188 +1,110 @@
 @charset "UTF-8";
 /* CSS Document */
 
+/* z-index: 9=TEMPTOP, 8=UI ELEMENTS, 7=MINIMAP, 6=STORIES, 5=OTHERTEXT, 4=NEWMAP, 3=OLDMAP, 2=FULLSTORY, 1= */
+
+
 body {
-	background-color: rgba(0,0,0,1.00);
+	background-color: rgba(0,0,0,1);	
+	transition: all 1s ease-in-out;
 }
-header {
-	display: none;	
-}
-.animate {
-	-webkit-transition: all 2s ease-in-out;
-    transition: all 2s ease-in-out;
-}
+
+/* GENERAL ELEMENTS */
+
+
 .hidden {
-	display: none;
+	display: none;	
 }
 .center {
 	text-align: center;	
+	position: relative;
+	top: 40vh;
+	transform: translateY(-50%);	
+	margin: 0 auto;
 }
-.timetravel {
-	z-index: 99;
-}
-.timetravel h2 {
-	font-size: 100px;
-}
-.timetravel h3 {
-	font-size: 60px;	
-}
+
+/* OTHER ELEMENTS */
 
 .map {
-	background-position: 100% 50%;
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-size: cover;
 	position: absolute;
-	width: 100vw;
-	height: 100vh;
 	top: 0;
 	left: 0;
+	display: none;
+	transition: all 1s ease-in-out;
+	z-index: 3;
 }
-.minimap {
-	 width: 15vw;
-	 height: 15vh;
-	 top: 0;
-	 left: 0;
-	 margin: 20px;
-	 position: absolute;
-	 z-index: 999;
-	 border-radius: 100px;
-	 border: solid thick black;
+	.old_map {
+		background-image: url(../images/oldmap.png);
+		z-index: 3;
+	}
+	.new_map {
+		background-image: url(../images/newmap.png);
+		z-index: 2;
+	}
+	.large_map {
+		width: 100vw;
+		height: 100vh;
+		z-index: 2;
+	}
+	.mini_map {
+		width: 15vw;
+		height: 15vh;
+		z-index: 7;
+		
+		margin: 20px;
+		
+		border-radius: 100px;
+		border: solid thick black;
+	}
+	
+p.intro {
+	z-index: 9;	
+	width: 60%;
+
+	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	color: #fff;
+	font-size: 30px;
 }
-.newmap {
-	background-image:url(../images/newmap.png);
-	background-size: cover;
-}
-.oldmap {
-	background-image:url(../images/oldmap.png);
-	background-size: 100% 100%;
-	box-shadow: 40px 40px 80px #000 inset,-40px -40px 80px #000 inset;
-}
-.centered {
-	position: absolute;
-	margin: 0 auto;
-	top: 50%;
-	left: 50%;
-	-webkit-transform:translate(-50%, -50%);
-	transform:translate(-50%, -50%);
-	z-index: 9;
-	height: 300px;
-	overflow: display;
-	text-align: center;
-}
-.container-fluid {
-}
+	
 .intro {
+	z-index: 9;	
 	font-family: 'Clicker Script', cursive;
-	text-align: center;
-	color: rgba(255,255,255,1.00);
-}
-.intro h1 {
-	font-size: 100px;
-	font-weight: 900;
-}
-.intro h2 {
-	font-size: 60px;
-	font-weight: 100;
 	color: #fff;
 }
-.intro p {
-	font-size: 50px;
+.title {
+	z-index: 5;
 }
-.introImage {
-	width: 50vw;
-	height: 50vw;
-	background-size: contain;
-	position: absolute;
-	opacity: 0.1;
-	display: none;
-	box-shadow: 60px 60px 200px #000 inset,-60px -60px 200px #000 inset;
-	border-radius: 20px;
+	h1.title {
+		font-size: 100px;
+		font-weight: 900;
+	}
+	h2.title {
+		font-size: 60px;
+		font-weight: 100;
+	}
+	p.title {
+		font-size: 50px;
+	}
+.story {
 	z-index: 2;
 }
-.ui {
-	z-index: 999;
-	position: absolute;
-	top: 0;
-	left: 0;	
-}
-a.skipIntro {
-	position: absolute;
-	color: #fff;
-	text-decoration: none;
-	background-color: rgba(255,255,255,0.2);
-	display: block;
-	padding: 10px 20px;
-	font-size: 30px;
-	z-index: 99;
-	top: 20px;
-	right: 50px;
-	border-radius: 10px;
-	font-family: 'Clicker Script', cursive;
-}
-a.skipIntro:hover {
-	background-color: rgba(255,255,255,0.4);
+	.story h3 {
+		z-index: 6;	
+		width: 200px;
+		height: 200px;
+		background-color: rgba(15,0,0,1.00);
+		border-radius: 25px;
+	}
+	.story .storycontent {
+		position: absolute;
+		width: 100vw;
+		height: 100vh;
+		top:0;
+		left: 0;
+		z-index: 2;	
 
-}
-.tip {
-	right: 50px;
-	bottom: 50px;
-	background-color: rgba(65,65,65,0.30);
-	z-index: 999;
-	position: fixed;
-	padding: 8px;
-	width: 25vw;
-	font-size: 18px;
-	color: rgba(255,255,255,1.00);
-	font-weight: 600;
-}
-.story {
-	position: absolute;
-	display: none;
-}
-.story h3 {
-	color: rgba(255,255,255,0.90);
-	background-color: rgba(0,0,0,0.6);
-	padding: 20px;
-	display: none;
-	border-radius: 20px;
-	border: 3px solid rgba(0,0,0,1);
-	position: absolute;
-}
-.fullStory {
-	top: 0;
-	left: 0;
-	height: 100vh;
-	width: 100vw;
-	position: fixed;
-	display: none;	
-	z-index: 200;
-	color: #000;
-}
-.fullStory h2 {
-	color: #fff;
-	font-size: 50px;
-	text-align: center;
-	margin: 20px;
-}
-.story a.back2Map {
-	position: absolute;
-	margin: 20px;
-	right: 0;
-	bottom: 0;	
-	color: #fff;
-	font-size: 20px;
-}
-.story1 {
-	top: 20vh;
-	left: 50vw;
-}
-.story2 {
-	top: 20vh;
-	left: 80vw;
-}
-.story3 {
-	top: 40vh;
-	left: 10vw;
-}
-.story4 {
-	top: 50vh;
-	left: 40vw;
-}
+		background-color: rgba(255,255,255,1.00);
+	}

@@ -1,162 +1,208 @@
-		// JavaScript Document
-$(document).ready(function(){  // Makes sure nothing is done until the 'DOM' (Document Object Model) has loaded
+// JavaScript Document
 
-	// ------------------------------------------------------------------------------  FUNCTIONS
+$(document).ready(function(){  								// Makes sure nothing is done until the 'DOM' (Document Object Model) has loaded
+"use strict";
 	
-					
-		function fadeUi() {
-			$('.ui').fadeIn(1000);									// Fade user interface in
-			$('.story').each(function(index) {						// For each instance of the class '.story'
-				$(this).delay(1500*index).fadeIn(1500);				// Fade in after a delay of 1500 multiplied by whatever instance of the class it is in the DOM flow (so they fade in one after another)
-			});	
-			$('.story h3').each(function(index) {	
-				$(this).delay(1500*index).fadeIn(1500);
-			});	
-			return false;
-		}
+// GENERAL FUNCTIONS ------------------
+	
+	
+//	function randomNum(upper, lower) {								// Function to return random number, upper is the highest random number desired, lower is the lowest number desired.
+//		return Math.floor(Math.random() * upper) + lower;	
+//	}
+	
+// INTRO ------------------------------
+
+	var i;
+	var arrayLoop;
+	
+	var delayTime = 500;
+	var timeIns = 500; // element fade ins
+	var timeShort = 2000; // element fade ins
+	var timeMed = 3000; // text fade out, map fade in
+	var timeLong = 5000; // text fade in
+	var timeMapTransition = 10000; // map transition
+
+	function addtoDelay(t) {
+		console.log("addtoDelay - " + t);
+		delayTime = delayTime + t; 
+	}
+	
+	function removeHidden(e) {
+		console.log("removeHidden - " + e);
+		$(e).removeClass('hidden');
+	}
+	
+	function fadeInOut(e) {	
+		console.log("fadeInOut - " + e);
+		$(e).delay(delayTime).css({'opacity':'0'}).animate({'margin-top':'-4px','font-size':'29px','opacity':'0.9'},timeLong, 'linear', removeHidden(e));
+		$(e).animate({'margin-top':'-8px','font-size':'28px','opacity':'0'},timeMed, 'linear', function() { $(e).css({'display':'none'}); });
+		addtoDelay(timeLong+timeMed);
+	}
+	
+	function fadeInElement(e) {
+		console.log("fadeInElement - " + e);
+		$(e).delay(delayTime).css({'opacity':'0'}).animate({'margin-top':'-4px','font-size':'29px','opacity':'0.9', 'display':'block'},timeMed, 'linear', removeHidden(e));
+		addtoDelay(timeMed);
+	}
+	
+	
+	// Intro Text
+	
+	for ( i = 0, arrayLoop = $( "p.intro" ).toArray(); i < arrayLoop.length; i++ ) {
+    	setTimeout(fadeInOut(arrayLoop[i]),delayTime);
+  	}
+	
+
+	// Loading, Bournemouth and Title Intro
+	
+	$('p.title').delay(delayTime).fadeIn(timeShort, function() { $(this).removeClass('hidden'); addtoDelay(timeShort+500);}); // LOADING
+	$('h1 span').text('2016');
+	$('h1').delay(delayTime).fadeIn(timeShort, function() { $(this).removeClass('hidden'); addtoDelay(timeShort);}); // TITLE (DATE)
+			
+			
+	// Map Intro
+	
+	var day;
+	var month;
+
+	switch (new Date().getDay()) {
+		case 0:
+			day = "Sunday";
+			break;
+		case 1:
+			day = "Monday";
+			break;
+		case 2:
+			day = "Tuesday";
+			break;
+		case 3:
+			day = "Wednesday";
+			break;
+		case 4:
+			day = "Thursday";
+			break;
+		case 5:
+			day = "Friday";
+			break;
+		case 6:
+			day = "Saturday";
+	}
+	
+	switch (new Date().getMonth()) {
+		case 0:
+			month = "January";
+			break;
+		case 1:
+			month = "February";
+			break;
+		case 2:
+			month = "March";
+			break;
+		case 3:
+			month = "April";
+			break;
+		case 4:
+			month = "May";
+			break;
+		case 5:
+			month = "June";
+			break;
+		case 6:
+			month = "July";
+			break;
+		case 7:
+			month = "August";
+			break;
+		case 8:
+			month = "September";
+			break;
+		case 9:
+			month = "October";
+			break;
+		case 10:
+			month = "November";
+			break;
+		case 11:
+			month = "December";
+			break;
+	}
+	
+	var date;
+	
+	if (Date.getMonth === 1 || 11 || 21 || 31) {
+		date = "st";
+	} else if (Date.getMonth === 2 || 12 || 22) {
+		date = "nd";
+	} else if (Date.getMonth === 3 || 13 || 23) {
+		date = "rd";
+	} else {
+		date = "th";
+	}
+	
+	date = Date().getMonth() + date;
+	
+	console.log(date);
+	
+	var todaysDate = day + " " + date + " " + month;
+			
+	$('.old_map').prepend("<div class='hidden map large_map new_map'></div");
+	
+	$('.new_map').delay(delayTime).fadeIn(timeLong, function() { 
+		addtoDelay(timeLong); 
 		
-		function intro() {
-			$('.intro h1, .intro h2, .intro h3').fadeIn(1000, function() {
-				$('.intro p').fadeIn(1000);
+		$('.old_map').css({"display":"block"}, function() {
+			
+			$({ numberValue: $('h1 span').text() }).animate({ numberValue: 1942 }, {
+				duration: timeMapTransition, easing: 'swing', step: function() { 
+					$('h1').text(todaysDate);
+					console.log(todaysDate);
+					$('h1 span').text(Math.ceil(this.numberValue));
+				}
+			});  
+			
+			$('.new_map').fadeOut(timeMapTransition, 'swing', function() {
+				$('.new_map').remove();		
 			});
-		}
 			
-		function pulsing() {					
-			$('.intro p').delay(1000).fadeOut(1500).fadeIn(1500);	// New function that holds .intro p on screen for 1s, fades out (1.5s) and fades back in (1.5s)
-		}
+		});
+	});
+
 		
-		var eachImage = 0; 					// Start eachImage at 0;
+	// Make Stories Appear
 	
-		function introImages() {
-			eachImage ++;					// Every time function is run increment eachImage;
-			if (eachImage > 4) {			// if eachImage is over 4, start again.
-				eachImage = 0;
-			} else {												
-				var posX = Math.floor(Math.random() * 50) + 1;		// Choose random position between 1 and 80w/60h.
-				var posY = Math.floor(Math.random() * 10) + 1;
-				
-				$('.introImage').css('left', posX + "vw");			// move image to that position
-				$('.introImage').css('top', posY + "vh");
-				$('.introImage').css('background-image','url(images/' + eachImage + '.jpg)');		// Chane background-image to next image (using 'eachImage')
-				
-				$('.introImage').fadeIn(1500, function() {			// Fade image in (1s), hold (1s), fade out (1s)
-					$('.introImage').delay(1000).fadeOut(1500);
-				});			
-			}
-		} 									// Will get repeated until 
-			
-		function fadeStories() {
-			$('.oldmap').fadeIn(1000, function() {
-				fadeUi();
-			});			
-		}
-	
-	
-	// ------------------------------------------------------------------------------  INTRO
-		
-		
-		pulsing();
-		var pulsingInterval = setInterval(pulsing, 4000);
-		
-		introImages();
-		var introImagesInterval = setInterval(introImages, 4100);
+	for ( i = 0, arrayLoop = $( ".story").toArray(); i < arrayLoop.length; i++ ) {
+    	setTimeout(fadeInElement(arrayLoop[i]), delayTime);
+		addtoDelay(500);
+  	}
 
 
-		$('.intro').delay(15000).fadeOut(1000, function () {
-			clearInterval(pulsingInterval);
-			clearInterval(introImagesInterval);
-			
-			$('a.skipIntro').css('background-color','rgba(0,0,0,0.5');
-			$('a.skipIntro').hover(function() {
-				$(this).css('background-color','rgba(0,0,0,0.9');
-			}, function(){
-				$(this).css("background-color", 'rgba(0,0,0,0.5'); 
+// LARGE_MAP / MINI_MAP TRANSITION ---------------------
+
+	function mapTransition(e) {
+		console.log("clicked");
+		if ( $('.map').hasClass('large_map') ) {
+			$('.story').find('h3').fadeOut(timeIns);
+			$(e).find('.storycontent').removeClass('hidden').queue(function(next) {
+				$('.map').addClass('mini_map');
+				$('.map').removeClass('large_map');
+				next();
 			});
-			
-			$('.newmap').fadeIn(3000, function(){
-				$('.oldmap').css('display','block');
-				$('.timetravel h2').fadeIn(1000, function() {
-					$('.timetravel h3').fadeIn(1500, function() {
-						$({numberValue: $('.timetravel h2').text() }).animate({numberValue: 1942}, {
-							duration: 8000, easing: 'linear', step: function() { 
-								$('.timetravel h2').text(Math.ceil(this.numberValue)); 
-							}
-						});
-						$('.newmap').delay(1000).fadeOut(8000, function(){
-							$('.timetravel h2').fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500, function() {
-								$('.timetravel, a.skipIntro').fadeOut(800, function() {
-									$('.newmap').addClass('animate');
-									$('.oldmap').addClass('animate');
-									fadeUi();
-								});									
-							});
-						});
-					});		
-				});
+		} else  {
+			$('.map').removeClass('mini_map').addClass('large_map').queue(function(next) {
+				$(e).find('.storycontent').addClass('hidden');
+				next();
 			});
-		});	
-		intro();
+			$('.story h3').fadeIn(timeIns);
+		}
+	}
 		
-	// ------------------------------------------------------------------------------  SKIP INTRO BUTTON
-				
-			
-    	$("a.skipIntro").click(function(){
-        	$('*').finish().finish().finish().finish();
-			$('.oldmap').css('display', 'none');
-			$('.ui').css('display', 'none');
-			
-			$("a.skipIntro").fadeOut(500, fadeStories());
-    	});
+	$('.story h3, .mini_map').click(function() {
+		mapTransition(this);
+	});
+	
+// STORIES --------------------------------------
 
-		
-	// ------------------------------------------------------------------------------  MAP ZOOM ANIMATION
-	
-		var zoomed = 0; 																					// Default set variable 'zoomed' to 0 (no);
-			
-		$(".story h3").click(function() {																	// When you click on the title of a story
-			
-			$('.tip').fadeOut(500);																			// fade out the tip.
-				
-			if  (zoomed === 0) {																			// check if map is already zoomed in
-				
-				// set a new variable called 'percX' and 'percY' to the position of the click so we can change that to the center position of the map when we zoom
-				var percX = (event.pageX / $('.map').width()) * 100;																	
-				var percY = (event.pageY / $('.map').height()) * 100;										
-				
-				$('.story h3').css('display','none');														// Hide the title of the story.
-				$('.oldmap').css("box-shadow", "0px 0px 0px #000 inset,0px 0px 0px #000 inset");			 // Remove the 	vignetting on the div
-				$('.oldmap').css("background-position", percX+"% " + percY + "% ");						 // center the image where the user clicked
-				$('.oldmap').css("background-size", "200% 200%");											// zoom in 200%
-				$('.oldmap').removeClass('map').addClass('minimap');										// remove map class and add minimap class
-				$(this).siblings(".fullStory").fadeIn(500);												// create full video
-				zoomed = 1;																					// Set zoomed to 1 (yes)
-				
-			} else {
-				$(this).siblings(".fullStory").fadeOut(500);
-				$('.oldmap').css("background-position", "100% 50%");
-				$('.oldmap').css("background-size", "100% 100%");
-				$('.oldmap').css("box-shadow", "40px 40px 80px #000 inset,-40px -40px 80px #000 inset");
-				$('.oldmap').removeClass('minimap').addClass('map');										// remove map class and add minimap class
-				$('.story h3').fadeIn(100);
-				zoomed = 0;
-			}
-		});
-		
-		$('a.back2Map').click(function() {
-			$(".fullStory").fadeOut(500);
-			$('.oldmap').css("background-position", "100% 50%");
-			$('.oldmap').css("background-size", "100% 100%");
-			$('.oldmap').css("box-shadow", "40px 40px 80px #000 inset,-40px -40px 80px #000 inset");
-			$('.oldmap').removeClass('minimap').addClass('map');										// remove map class and add minimap class
-			$('.story h3').fadeIn(500);
-			zoomed = 0;				
-		});
-		
-	// ------------------------------------------------------------------------------  SCROLL FUNCTIONS
-	
-		$(document).scroll(function () {					// When user scrolls
-			var scrollPosition = $("body").scrollTop();		// Save scroll position as 'scrollPosition'
-				// Do Something	 (e.g. output scroll position)
-		});
+
+
 
 });
