@@ -7,13 +7,21 @@
 	
 		var i;
 		var arrayLoop;
+		var poiCat;
 		
+		var playerCurrent;
+
+		var winHeight = $(window).height();
+		var docHeight = $(document).height();
+			
 		var delayTime = 500;
 		var timeIns = 500; // element fade ins
 		var timeShort = 2000; // element fade ins
 		var timeMed = 3000; // text fade out, map fade in
 		var timeLong = 5000; // text fade in
+		
 		var introEnabled = 1;
+
 					
 		document.addEventListener("visibilitychange", function() {
 			if ( document.hasFocus() ) {
@@ -167,6 +175,106 @@
 	// STORIES --------------------------------------
 	
 	
+	// MEDIA PLAYER
+	
+	var player = $('.player');
+	var playerDuration =  player[0].duration;
+	
+	player.on('loadedmetadata', function() {
+    	playerDuration = player[0].duration;
+	});
+	
+	player.on('timeupdate', function() {
+    	var playerCurrent = player[0].currentTime;
+		var playerProgress = ((playerCurrent / playerDuration) * 100) + "%";
+				
+		$('.scrub_head').css({'top': playerProgress});
+		$('.scrub_head span').css({'height': playerProgress});
+		
+	
+		for ( i = 0, poiCat = $( ".poi" ).toArray(); i < poiCat.length; i++ ) { 
+			e = poiCat[i];
+									
+			var poiRange = [
+				(parseInt($(e).attr("data-timeAnchor")) - ((33 / winHeight) * 100)), 
+				(parseInt($(e).attr("data-timeAnchor")) + ((35 / winHeight) * 100))
+			];
+			
+			if (playerCurrent >= poiRange[0] && playerCurrent <= poiRange[1]) {
+				$(e).addClass('poi_active');
+				$(e).children().fadeIn(500);
+			} else  {
+				$(e).removeClass('poi_active');
+				$(e).children().fadeOut(500);			
+			}
+		}
+	});
+	
+	
+	// LOAD POINTS OF INTEREST
+	
+	for ( i = 0, poiCat = $( ".poi" ).toArray(); i < poiCat.length; i++ ) { 
+		var e = poiCat[i];
+				
+		var timeAnchor = $(e).attr("data-timeAnchor");
+				
+		var timelinePercentage = (timeAnchor / playerDuration) * 100 + "%";
+				
+		$(e).css({'top': timelinePercentage});
+			
+	}
+		
+	// TIMELINE
+		$('.poi').click(function() {
+			
+			if ($(this).hasClass('poi_active')) {
+				$(this).removeClass('poi_active');
+				$(this).children().fadeOut(500);
+			} else {
+				$('.poi').removeClass('poi_active');
+				$(this).addClass('poi_active');
+				$(this).children().fadeIn(500);			
+			}
+		});
+		$('.poi .poi_expand .p.a').click(function() {
+			$('.poi').removeClass('poi_active');
+		});
+		
+	// SEEKING 
+		var timeDrag = false;   /* Drag status */
+		
+		$('.timeline').mousedown(function(e) {
+			timeDrag = true;
+			updatebar(e.pageY);
+		});
+		
+		$(document).mouseup(function(e) {
+			if(timeDrag) {
+				timeDrag = false;
+				updatebar(e.pageY);
+			}
+		});
+		$(document).mousemove(function(e) {
+			if(timeDrag) {
+				updatebar(e.pageY);
+			}
+		});
+		 
+		//Seeking
+		var updatebar = function(x) {
+			
+			var position = x - offset.top;
+			var timeline = $('.timeline');
+			
+			var offset = $(winHeight).offset();
+			
+			var percentage = 100 * position / timeline.height();
+		 
+			//Update progress bar and video currenttime
+			$('.timeBar').css('width', percentage+'%');
+			player[0].currentTime = playerDuration * percentage / 100;
+		};
+	
 	
 	// ANIMATIONS ------------------------------------
 		
@@ -174,13 +282,14 @@
 		var scrollEnd = 1000;	
 		var scrollEnabled = 1;
 		
-		$('body').css({'height':($(window).height() + scrollEnd)});
+		$('body').css({'height':(winHeight + scrollEnd)});
 		
 		$(window).on('scroll', function () {
-	
-			var scrollTop = $(this).scrollTop();		
+		var scrollTop = $(this).scrollTop();	
+				
+			// Map Transition
 			var sProgress = (scrollTop - scrollStart) / (scrollEnd - scrollStart);
-			
+						
 			if (sProgress > 1) { sProgress = 1; }
 			else if (sProgress < 0) { sProgress = 0; }
 			
@@ -201,6 +310,14 @@
 					scrollEnabled = 0;
 					showStories();
 			}
+			
+			// Timeline Scroll Position
+			
+			var scrollPosition = ((scrollTop / (docHeight - winHeight + 10)) * 100) + "%";
+			console.log(scrollPosition, scrollTop, docHeight, winHeight);
+			$('.scroll_position').css({'top': scrollPosition});
+			
+			
 			
 		});
 
