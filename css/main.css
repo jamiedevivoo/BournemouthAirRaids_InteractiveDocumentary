@@ -6,7 +6,7 @@
 
 body {
 	background-color: rgba(0,0,0,1);	
-	transition: all 1s ease-in-out;
+	height: 1000px;
 }
 
 /* GENERAL ELEMENTS */
@@ -23,6 +23,10 @@ body {
 	margin: 0 auto;
 }
 
+.fixed {
+	position: fixed;	
+}
+
 /* OTHER ELEMENTS */
 
 .map {
@@ -33,7 +37,6 @@ body {
 	top: 0;
 	left: 0;
 	display: none;
-	transition: all 1s ease-in-out;
 	z-index: 3;
 }
 	.old_map {
@@ -42,12 +45,12 @@ body {
 	}
 	.new_map {
 		background-image: url(../images/newmap.png);
-		z-index: 2;
+		z-index: 4;
 	}
 	.large_map {
 		width: 100vw;
 		height: 100vh;
-		z-index: 2;
+		position: fixed;
 	}
 	.mini_map {
 		width: 15vw;
@@ -60,33 +63,33 @@ body {
 		border: solid thick black;
 	}
 	
-p.intro {
-	z-index: 9;	
-	width: 60%;
-
-	font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
-	color: #fff;
-	font-size: 30px;
+h1.title {
+	font-size: 80px;
+	font-weight: 900;
+	margin-top: 50px;
+	font-family: 'Clicker Script', cursive;
+	text-align: center;
+	color:rgba(30,30,30,1.00);	
+	z-index: 8;
 }
-	
 .intro {
-	z-index: 9;	
 	font-family: 'Clicker Script', cursive;
 	color: #fff;
+	z-index: 9;
 }
-.title {
-	z-index: 5;
-}
-	h1.title {
+	p.intro {
+		z-index: 9;	
+		width: 60%;
+		font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+		color: #fff;
+		font-size: 30px;
+	}
+	p.date {
 		font-size: 100px;
 		font-weight: 900;
 	}
-	h2.title {
-		font-size: 60px;
-		font-weight: 100;
-	}
-	p.title {
-		font-size: 50px;
+	p.fact {
+		
 	}
 .story {
 	z-index: 2;

@@ -1,208 +1,208 @@
-// JavaScript Document
-
-$(document).ready(function(){  								// Makes sure nothing is done until the 'DOM' (Document Object Model) has loaded
-"use strict";
+	// JavaScript Document
 	
-// GENERAL FUNCTIONS ------------------
-	
-	
-//	function randomNum(upper, lower) {								// Function to return random number, upper is the highest random number desired, lower is the lowest number desired.
-//		return Math.floor(Math.random() * upper) + lower;	
-//	}
-	
-// INTRO ------------------------------
-
-	var i;
-	var arrayLoop;
-	
-	var delayTime = 500;
-	var timeIns = 500; // element fade ins
-	var timeShort = 2000; // element fade ins
-	var timeMed = 3000; // text fade out, map fade in
-	var timeLong = 5000; // text fade in
-	var timeMapTransition = 10000; // map transition
-
-	function addtoDelay(t) {
-		console.log("addtoDelay - " + t);
-		delayTime = delayTime + t; 
-	}
-	
-	function removeHidden(e) {
-		console.log("removeHidden - " + e);
-		$(e).removeClass('hidden');
-	}
-	
-	function fadeInOut(e) {	
-		console.log("fadeInOut - " + e);
-		$(e).delay(delayTime).css({'opacity':'0'}).animate({'margin-top':'-4px','font-size':'29px','opacity':'0.9'},timeLong, 'linear', removeHidden(e));
-		$(e).animate({'margin-top':'-8px','font-size':'28px','opacity':'0'},timeMed, 'linear', function() { $(e).css({'display':'none'}); });
-		addtoDelay(timeLong+timeMed);
-	}
-	
-	function fadeInElement(e) {
-		console.log("fadeInElement - " + e);
-		$(e).delay(delayTime).css({'opacity':'0'}).animate({'margin-top':'-4px','font-size':'29px','opacity':'0.9', 'display':'block'},timeMed, 'linear', removeHidden(e));
-		addtoDelay(timeMed);
-	}
-	
-	
-	// Intro Text
-	
-	for ( i = 0, arrayLoop = $( "p.intro" ).toArray(); i < arrayLoop.length; i++ ) {
-    	setTimeout(fadeInOut(arrayLoop[i]),delayTime);
-  	}
-	
-
-	// Loading, Bournemouth and Title Intro
-	
-	$('p.title').delay(delayTime).fadeIn(timeShort, function() { $(this).removeClass('hidden'); addtoDelay(timeShort+500);}); // LOADING
-	$('h1 span').text('2016');
-	$('h1').delay(delayTime).fadeIn(timeShort, function() { $(this).removeClass('hidden'); addtoDelay(timeShort);}); // TITLE (DATE)
+	$(document).ready(function(){  	
+	"use strict";
 			
+	// Global Variables and Functions ------------------------------
+	
+		var i;
+		var arrayLoop;
+		
+		var delayTime = 500;
+		var timeIns = 500; // element fade ins
+		var timeShort = 2000; // element fade ins
+		var timeMed = 3000; // text fade out, map fade in
+		var timeLong = 5000; // text fade in
+		var introEnabled = 1;
+					
+		document.addEventListener("visibilitychange", function() {
+			if ( document.hasFocus() ) {
+    			console.log("YES");
+  			} 	else {
+    			console.log("NO");
+  			}	
+		});
+		
+		function checkIntroEnabled() {
+			if (introEnabled === 1) { return true; }
+			else { return false; }
+		}
+		
+		function addtoDelay(t) {
+			delayTime = delayTime + (t); 
+		}
+		
+		function removeHidden(e) {
+			$(e).removeClass('hidden');
+		}
+		
+		function fadeInOut(e) {	
+			$(e).delay(delayTime).css({'opacity':'0'}).animate({'margin-top':'-4px','font-size':'29px','opacity':'0.9'},timeLong, 'linear', removeHidden(e));
+			$(e).animate({'margin-top':'-8px','font-size':'28px','opacity':'0'},timeMed, 'linear', function() { $(e).css({'display':'none'}); });
+			addtoDelay(timeLong+timeMed);
+		}
+		
+		function fadeInElement(e) {
+			$(e).delay(delayTime).css({'opacity':'0'}).animate({'margin-top':'-4px','font-size':'29px','opacity':'0.9', 'display':'block'},timeMed, 'linear', removeHidden(e));
+			addtoDelay(timeMed);
+		}
+		
+		function showStories() {
+			for ( i = 0, arrayLoop = $( ".story").toArray(); i < arrayLoop.length; i++ ) {
+				setTimeout(fadeInElement(arrayLoop[i]), delayTime);
+				addtoDelay(500);
+			}
+		}
+		
+		function randomNum(upper, lower) {
+			return Math.floor(Math.random() * upper) + lower;	
+		}
+		
+		// Get Today's Date
+		
+		var d = new Date();
+		var date = d.getDate();
+		var day = d.getDay();
+		var month = d.getMonth();
+		var year = d.getFullYear();
+	
+		switch (day) {
+			case 0: day = "Sunday"; break;
+			case 1: day = "Monday"; break;
+			case 2: day = "Tuesday"; break;
+			case 3: day = "Wednesday"; break;
+			case 4: day = "Thursday"; break;
+			case 5: day = "Friday"; break;
+			case 6: day = "Saturday"; break;
+		}
+		
+		switch (month) {
+			case 0: month = "January"; break;
+			case 1: month = "February"; break;
+			case 2: month = "March"; break;
+			case 3: month = "April"; break;
+			case 4: month = "May"; break;
+			case 5: month = "June"; break;
+			case 6: month = "July"; break;
+			case 7: month = "August"; break;
+			case 8: month = "September"; break;
+			case 9: month = "October"; break;
+			case 10: month = "November"; break;
+			case 11: month = "December"; break;
+		}
+		
+		if (date === 1 || date === 21 || date === 31) {
+			date = date+"st";
+		} else if (date === 2 || date === 22) {
+			date = date+"nd";
+		} else if (date === 3 || date === 23) {
+			date = date+"rd";
+		} else {
+			date = date+"th";
+		}
+		
+		var today = day + " " + date + " " + month + " " + year;
 			
-	// Map Intro
+	// INTRO -------------------------------------------------------------------------
+		
+		$('h1').delay(delayTime).fadeIn(timeMed, function() { 			// TITLE
+			$(this).removeClass('hidden'); addtoDelay(timeMed+500); 	
+		
+		
+		
+		}); 
+		
+		// Intro Text	
+		for ( i = 0, arrayLoop = $( "p.fact" ).toArray(); i < arrayLoop.length; i++ ) { // Find all elements with the class 'fact' and cycle through them.
+			setTimeout(fadeInOut(arrayLoop[i]),delayTime);	// Fade in and out each fact
+		}	
 	
-	var day;
-	var month;
-
-	switch (new Date().getDay()) {
-		case 0:
-			day = "Sunday";
-			break;
-		case 1:
-			day = "Monday";
-			break;
-		case 2:
-			day = "Tuesday";
-			break;
-		case 3:
-			day = "Wednesday";
-			break;
-		case 4:
-			day = "Thursday";
-			break;
-		case 5:
-			day = "Friday";
-			break;
-		case 6:
-			day = "Saturday";
-	}
+		// Map Intro	
+		$('.old_map').before("<div class=\"map large_map new_map\"></div>");
+		$('.new_map').delay(delayTime).fadeIn(5000, function(){ 
+			$('.old_map').fadeIn(100);
+			$('p.date').text(today).fadeIn(timeShort, function() { $(this).removeClass('hidden'); addtoDelay(timeShort);}); // TITLE (DATE)	
+			addtoDelay(timeLong + timeShort); 
+		});
 	
-	switch (new Date().getMonth()) {
-		case 0:
-			month = "January";
-			break;
-		case 1:
-			month = "February";
-			break;
-		case 2:
-			month = "March";
-			break;
-		case 3:
-			month = "April";
-			break;
-		case 4:
-			month = "May";
-			break;
-		case 5:
-			month = "June";
-			break;
-		case 6:
-			month = "July";
-			break;
-		case 7:
-			month = "August";
-			break;
-		case 8:
-			month = "September";
-			break;
-		case 9:
-			month = "October";
-			break;
-		case 10:
-			month = "November";
-			break;
-		case 11:
-			month = "December";
-			break;
-	}
-	
-	var date;
-	
-	if (Date.getMonth === 1 || 11 || 21 || 31) {
-		date = "st";
-	} else if (Date.getMonth === 2 || 12 || 22) {
-		date = "nd";
-	} else if (Date.getMonth === 3 || 13 || 23) {
-		date = "rd";
-	} else {
-		date = "th";
-	}
-	
-	date = Date().getMonth() + date;
-	
-	console.log(date);
-	
-	var todaysDate = day + " " + date + " " + month;
-			
-	$('.old_map').prepend("<div class='hidden map large_map new_map'></div");
-	
-	$('.new_map').delay(delayTime).fadeIn(timeLong, function() { 
-		addtoDelay(timeLong); 
+		/*
 		
 		$('.old_map').css({"display":"block"}, function() {
-			
-			$({ numberValue: $('h1 span').text() }).animate({ numberValue: 1942 }, {
-				duration: timeMapTransition, easing: 'swing', step: function() { 
-					$('h1').text(todaysDate);
-					console.log(todaysDate);
-					$('h1 span').text(Math.ceil(this.numberValue));
-				}
-			});  
-			
-			$('.new_map').fadeOut(timeMapTransition, 'swing', function() {
-				$('.new_map').remove();		
+				$({ numberValue: $('h1 span').text() }).animate({ numberValue: 1942 }, {
+					duration: timeMapTransition, easing: 'swing', step: function() { 
+						// $('h1').text(todaysDate);
+						// console.log(todaysDate);
+						$('h1 span').text(Math.ceil(this.numberValue));
+					}
+				});  
 			});
+		});
+	
+		*/
+	
+	// LARGE_MAP / MINI_MAP TRANSITION ---------------------
+	
+		function mapTransition(e) {
+			console.log("clicked");
+			if ( $('.map').hasClass('large_map') ) {
+				$('.story').find('h3').fadeOut(timeIns);
+				$(e).find('.storycontent').removeClass('hidden').queue(function(next) {
+					$('.map').addClass('mini_map');
+					$('.map').removeClass('large_map');
+					next();
+				});
+			} else  {
+				$('.map').removeClass('mini_map').addClass('large_map').queue(function(next) {
+					$(e).find('.storycontent').addClass('hidden');
+					next();
+				});
+				$('.story h3').fadeIn(timeIns);
+			}
+		}
+			
+		$('.story h3, .mini_map').click(function() {
+			mapTransition(this);
+		});
+		
+	// STORIES --------------------------------------
+	
+	
+	
+	// ANIMATIONS ------------------------------------
+		
+		var scrollStart = 0;
+		var scrollEnd = 1000;	
+		var scrollEnabled = 1;
+		
+		$('body').css({'height':($(window).height() + scrollEnd)});
+		
+		$(window).on('scroll', function () {
+	
+			var scrollTop = $(this).scrollTop();		
+			var sProgress = (scrollTop - scrollStart) / (scrollEnd - scrollStart);
+			
+			if (sProgress > 1) { sProgress = 1; }
+			else if (sProgress < 0) { sProgress = 0; }
+			
+			/*
+			if (sProgress > 0.01) {
+				$('span.2day').fadeOut(timeShort);	
+			}
+			*/
+			
+			if (scrollEnabled === 1) {
+				$('.old_map').css({'opacity': sProgress});
+			}
+					
+			if (sProgress === 1) {
+					$('.new_map').remove();	
+					$('.date').fadeOut(timeShort);
+					$('body').css({'height':'auto'});
+					scrollEnabled = 0;
+					showStories();
+			}
 			
 		});
+
+	// DOCUMENT READY
 	});
-
-		
-	// Make Stories Appear
-	
-	for ( i = 0, arrayLoop = $( ".story").toArray(); i < arrayLoop.length; i++ ) {
-    	setTimeout(fadeInElement(arrayLoop[i]), delayTime);
-		addtoDelay(500);
-  	}
-
-
-// LARGE_MAP / MINI_MAP TRANSITION ---------------------
-
-	function mapTransition(e) {
-		console.log("clicked");
-		if ( $('.map').hasClass('large_map') ) {
-			$('.story').find('h3').fadeOut(timeIns);
-			$(e).find('.storycontent').removeClass('hidden').queue(function(next) {
-				$('.map').addClass('mini_map');
-				$('.map').removeClass('large_map');
-				next();
-			});
-		} else  {
-			$('.map').removeClass('mini_map').addClass('large_map').queue(function(next) {
-				$(e).find('.storycontent').addClass('hidden');
-				next();
-			});
-			$('.story h3').fadeIn(timeIns);
-		}
-	}
-		
-	$('.story h3, .mini_map').click(function() {
-		mapTransition(this);
-	});
-	
-// STORIES --------------------------------------
-
-
-
-
-});
