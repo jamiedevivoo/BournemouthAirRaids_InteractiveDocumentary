@@ -132,6 +132,8 @@ h1.title {
 		position: absolute;
 		display: block;
 		z-index: 5;
+		top:0;
+		transition: all 0.5s ease-in-out;
 	}
 		.scrub_head span {
 			content: "";	
@@ -140,6 +142,7 @@ h1.title {
 			position: fixed;
 			top:0;
 			background-color:rgba(0,0,0,0.30);
+			transition: all 0.5s ease-in-out;
 		}
 	.scroll_position {
 		height: 5px;
@@ -159,8 +162,21 @@ h1.title {
 		transition: all 0.2s;
 		left: 50%;
 		z-index: 9;
+		cursor: pointer;
 	}
+		.poi:hover {
+			background-color: rgba(158,146,0,1.00);	
+		}
+		.poi:active {
+			background-color: rgba(255,237,0,1.00);	
+		}
 		.poi_active {
+			left: 50%;
+			width: 50px;
+			height: 50px;
+			background-color: rgba(255,237,0,1.00);	
+		}
+		.poi_active:hover {
 			left: 50%;
 			width: 50px;
 			height: 50px;

@@ -1,7 +1,6 @@
 	// JavaScript Document
 	
 	$(document).ready(function(){  	
-	"use strict";
 			
 	// Global Variables and Functions ------------------------------
 	
@@ -203,7 +202,7 @@
 			if (playerCurrent >= poiRange[0] && playerCurrent <= poiRange[1]) {
 				$(e).addClass('poi_active');
 				$(e).children().fadeIn(500);
-			} else  {
+			} else {
 				$(e).removeClass('poi_active');
 				$(e).children().fadeOut(500);			
 			}
@@ -225,29 +224,26 @@
 	}
 		
 	// TIMELINE
-		$('.poi').click(function() {
-			
-			if ($(this).hasClass('poi_active')) {
-				$(this).removeClass('poi_active');
-				$(this).children().fadeOut(500);
+		$('.poi').click(function(e) {
+			if (e.target !== this) return;
+			if ( $(this).hasClass('poi_active')) {
+				$('.poi').removeClass('poi_active').children().fadeOut(500);
 			} else {
-				$('.poi').removeClass('poi_active');
-				$(this).addClass('poi_active');
-				$(this).children().fadeIn(500);			
+				$('.poi').removeClass('poi_active').children().fadeOut(500);
+				$(this).addClass('poi_active').children().fadeIn(500);
 			}
 		});
-		$('.poi .poi_expand .p.a').click(function() {
-			$('.poi').removeClass('poi_active');
-		});
+		
 		
 	// SEEKING 
 		var timeDrag = false;   /* Drag status */
 		
 		$('.timeline').mousedown(function(e) {
+			if (e.target !== this) return;
 			timeDrag = true;
 			updatebar(e.pageY);
 		});
-		
+
 		$(document).mouseup(function(e) {
 			if(timeDrag) {
 				timeDrag = false;
@@ -263,12 +259,9 @@
 		//Seeking
 		var updatebar = function(x) {
 			
-			var position = x - offset.top;
 			var timeline = $('.timeline');
-			
-			var offset = $(winHeight).offset();
-			
-			var percentage = 100 * position / timeline.height();
+						
+			var percentage = 100 * x / timeline.height();
 		 
 			//Update progress bar and video currenttime
 			$('.timeBar').css('width', percentage+'%');
