@@ -7,8 +7,6 @@
 		var i;
 		var arrayLoop;
 		var poiCat;
-		
-		var playerCurrent;
 
 		var winHeight = $(window).height();
 		var docHeight = $(document).height();
@@ -178,14 +176,16 @@
 	
 	var player = $('.player');
 	var playerDuration =  player[0].duration;
+	var playerCurrent;
+	var playerProgress;
 	
 	player.on('loadedmetadata', function() {
     	playerDuration = player[0].duration;
 	});
 	
 	player.on('timeupdate', function() {
-    	var playerCurrent = player[0].currentTime;
-		var playerProgress = ((playerCurrent / playerDuration) * 100) + "%";
+    	playerCurrent = player[0].currentTime;
+		playerProgress = ((playerCurrent / playerDuration) * 100) + "%";
 				
 		$('.scrub_head').css({'top': playerProgress});
 		$('.scrub_head span').css({'height': playerProgress});
@@ -223,18 +223,6 @@
 			
 	}
 		
-	// TIMELINE
-		$('.poi').click(function(e) {
-			if (e.target !== this) return;
-			if ( $(this).hasClass('poi_active')) {
-				$('.poi').removeClass('poi_active').children().fadeOut(500);
-			} else {
-				$('.poi').removeClass('poi_active').children().fadeOut(500);
-				$(this).addClass('poi_active').children().fadeIn(500);
-			}
-		});
-		
-		
 	// SEEKING 
 		var timeDrag = false;   /* Drag status */
 		
@@ -256,18 +244,42 @@
 			}
 		});
 		 
+		 var percentage;
 		//Seeking
 		var updatebar = function(x) {
 			
 			var timeline = $('.timeline');
 						
-			var percentage = 100 * x / timeline.height();
-		 
+			percentage = 100 * x / timeline.height();
+					 
 			//Update progress bar and video currenttime
 			$('.timeBar').css('width', percentage+'%');
 			player[0].currentTime = playerDuration * percentage / 100;
 		};
+		
+		$('.timeline').hover(function() {
+			$('.scrub_head').css({'top':percentage});
+			console.log(percentage);
+		});
+		
 	
+	// TIMELINE
+		$('.poi').click(function(e) {
+			if (timeDrag !== true) { 
+				if (e.target !== this) return;
+				if ( $(this).hasClass('poi_active')) {
+					$('.poi').removeClass('poi_active').children().fadeOut(500);
+				} else {
+					$('.poi').removeClass('poi_active').children().fadeOut(500);
+					$(this).addClass('poi_active').children().fadeIn(500);
+				}
+			}
+		});
+		
+		$('.poi .poi_expand p a').click(function() {
+				$('.poi').removeClass('poi_active').children().fadeOut(500);
+		});
+			
 	
 	// ANIMATIONS ------------------------------------
 		

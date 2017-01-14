@@ -124,6 +124,7 @@ h1.title {
 	height: 100vh;
 	width: 50px;
 	background-color:rgba(200,200,200,1.00);
+		cursor: pointer;
 }
 	.scrub_head {
 		height: 4px;
@@ -133,7 +134,6 @@ h1.title {
 		display: block;
 		z-index: 5;
 		top:0;
-		transition: all 0.5s ease-in-out;
 	}
 		.scrub_head span {
 			content: "";	
@@ -142,7 +142,6 @@ h1.title {
 			position: fixed;
 			top:0;
 			background-color:rgba(0,0,0,0.30);
-			transition: all 0.5s ease-in-out;
 		}
 	.scroll_position {
 		height: 5px;
@@ -162,7 +161,6 @@ h1.title {
 		transition: all 0.2s;
 		left: 50%;
 		z-index: 9;
-		cursor: pointer;
 	}
 		.poi:hover {
 			background-color: rgba(158,146,0,1.00);	
