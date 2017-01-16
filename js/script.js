@@ -4,8 +4,8 @@
 			
 	// Global Variables and Functions ------------------------------
 	
-		var i;
-		var arrayLoop;
+		var i = 0;
+		var arrayLoop = [];
 		var poiCat;
 
 		var winHeight = $(window).height();
@@ -170,117 +170,150 @@
 		});
 		
 	// STORIES --------------------------------------
-	
-	
+		
+		
 	// MEDIA PLAYER
-	
-	var player = $('.player');
-	var playerDuration =  player[0].duration;
-	var playerCurrent;
-	var playerProgress;
-	
-	player.on('loadedmetadata', function() {
-    	playerDuration = player[0].duration;
-	});
-	
-	player.on('timeupdate', function() {
-    	playerCurrent = player[0].currentTime;
-		playerProgress = ((playerCurrent / playerDuration) * 100) + "%";
-				
-		$('.scrub_head').css({'top': playerProgress});
-		$('.scrub_head span').css({'height': playerProgress});
+	function mediaPlayer(x) {
 		
-	
-		for ( i = 0, poiCat = $( ".poi" ).toArray(); i < poiCat.length; i++ ) { 
-			e = poiCat[i];
-									
-			var poiRange = [
-				(parseInt($(e).attr("data-timeAnchor")) - ((33 / winHeight) * 100)), 
-				(parseInt($(e).attr("data-timeAnchor")) + ((35 / winHeight) * 100))
-			];
-			
-			if (playerCurrent >= poiRange[0] && playerCurrent <= poiRange[1]) {
-				$(e).addClass('poi_active');
-				$(e).children().fadeIn(500);
-			} else {
-				$(e).removeClass('poi_active');
-				$(e).children().fadeOut(500);			
-			}
-		}
-	});
-	
-	
-	// LOAD POINTS OF INTEREST
-	
-	for ( i = 0, poiCat = $( ".poi" ).toArray(); i < poiCat.length; i++ ) { 
-		var e = poiCat[i];
-				
-		var timeAnchor = $(e).attr("data-timeAnchor");
-				
-		var timelinePercentage = (timeAnchor / playerDuration) * 100 + "%";
-				
-		$(e).css({'top': timelinePercentage});
-			
-	}
+		console.log(x);
 		
-	// SEEKING 
-		var timeDrag = false;   /* Drag status */
-		
-		$('.timeline').mousedown(function(e) {
-			if (e.target !== this) return;
-			timeDrag = true;
-			updatebar(e.pageY);
-		});
+		var story = "#" + $(x).attr("data-story");
 
-		$(document).mouseup(function(e) {
-			if(timeDrag) {
-				timeDrag = false;
-				updatebar(e.pageY);
-			}
+		console.log(story);
+
+		var player = $('#audio');
+		
+		console.log(player);
+
+		var playerDuration =  player[0].duration;
+		
+		var playerCurrent = 0;
+		var	playerProgress = "";
+		var timeline = $(story+'.timeline');
+		
+		// Define Player Duration
+		player.on('loadedmetadata', function() {
+			playerDuration = player[0].duration;
 		});
-		$(document).mousemove(function(e) {
-			if(timeDrag) {
-				updatebar(e.pageY);
-			}
-		});
-		 
-		 var percentage;
-		//Seeking
-		var updatebar = function(x) {
+		
+			// LOAD POINTS OF INTEREST
+		
+		for ( i = 0, poiCat = $( ".poi" ).toArray(); i < poiCat.length; i++ ) { 
+			var e = poiCat[i];
+					
+			var timeAnchor = $(e).attr("data-timeAnchor");
+					
+			var timelinePercentage = (timeAnchor / playerDuration) * 100 + "%";
+					
+			$(e).css({'top': timelinePercentage});
+				
+		}
+		
+		function timelineUpdate() {
+			playerCurrent = player[0].currentTime;
+			playerProgress = ((playerCurrent / playerDuration) * 100) + "%";
+					
+			$('.scrub_head').css({'top': playerProgress});
+			$('.scrub_head span').css({'height': playerProgress});
 			
-			var timeline = $('.timeline');
-						
-			percentage = 100 * x / timeline.height();
-					 
-			//Update progress bar and video currenttime
-			$('.timeBar').css('width', percentage+'%');
-			player[0].currentTime = playerDuration * percentage / 100;
-		};
-		
-		$('.timeline').hover(function() {
-			$('.scrub_head').css({'top':percentage});
-			console.log(percentage);
-		});
-		
-	
-	// TIMELINE
-		$('.poi').click(function(e) {
-			if (timeDrag !== true) { 
-				if (e.target !== this) return;
-				if ( $(this).hasClass('poi_active')) {
-					$('.poi').removeClass('poi_active').children().fadeOut(500);
+			// Every time the player updates, loop through all POI's  
+			for ( i = 0; i < poiCat.length; i++ ) { 
+				e = poiCat[i];
+				
+				// Establish the range of each POI		
+				var poiRange = [
+					(parseInt($(e).attr("data-timeAnchor")) - ((33 / winHeight) * 100)), 
+					(parseInt($(e).attr("data-timeAnchor")) + ((35 / winHeight) * 100))
+				];
+				
+				// If current time is within range, activate POI, otherwise hide it
+				if (playerCurrent >= poiRange[0] && playerCurrent <= poiRange[1]) {
+					$(e).addClass('poi_active');
+					$(e).children().fadeIn(500);
 				} else {
-					$('.poi').removeClass('poi_active').children().fadeOut(500);
-					$(this).addClass('poi_active').children().fadeIn(500);
+					$(e).removeClass('poi_active');
+					$(e).children().fadeOut(500);			
 				}
-			}
-		});
-		
-		$('.poi .poi_expand p a').click(function() {
-				$('.poi').removeClass('poi_active').children().fadeOut(500);
-		});
+			} // END playerUpdate Function
 			
+			// Define and update current time
+			player.on('timeupdate', function() {
+				timelineUpdate();
+			});
+				
+		} // END mediaPlayer Function
+			
+		// SEEKING 
+			var timeDrag = false;   /* Drag status */
+			
+			// On click, send mouse coordinates to update functions
+			$('.timeline, .timeline span').mousedown(function(e) {
+				if (e.target !== this) return;
+				timeDrag = true;
+				updatePlayer(e.pageY);
+			});
+			
+			$(document).mouseup(function(e) {
+				if(timeDrag) {
+					timeDrag = false;
+					updatePlayer(e.pageY);
+				}
+			});
+			
+			// On mouse move, move scrub_head and update current time if user clicks
+			$('.timeline').mousemove(function(e) {
+				$('.scrub_head').css({'top':e.pageY});
+				if(timeDrag) {
+					updatePlayer(e.pageY);
+				}
+			});
+			
+			$('.timeline').mouseenter(function(e) {
+				$('.scrub_head').css({'top':e.pageY});
+			});
+			
+			// Set scrub_head back to current time
+			$('.timeline').mouseleave(function() {
+				timelineUpdate();
+			});
+			 
+			var percentage;
+			
+			//updatePlayer
+			var updatePlayer = function(x) {
+											
+				percentage =  100 * (x - $(this).scrollTop()) / timeline.height();
+						 
+				//Update progress bar and video currenttime
+				$('.timeBar').css('width', percentage+'%');
+				player[0].currentTime = playerDuration * percentage / 100;
+			};
+			
+			$('.timeline').hover(function() {
+				$('.scrub_head').css({'top':percentage});
+			});
+			
+		// TIMELINE
+			$('.poi').click(function(e) {
+				if (timeDrag !== true) { 
+					if (e.target !== this) return;
+					if ( $(this).hasClass('poi_active')) {
+						$('.poi').removeClass('poi_active').children().fadeOut(500);
+					} else {
+						$('.poi').removeClass('poi_active').children().fadeOut(500);
+						$(this).addClass('poi_active').children().fadeIn(500);
+					}
+				}
+			});
+			
+			$('.poi .poi_expand p a').click(function() {
+					$('.poi').removeClass('poi_active').children().fadeOut(500);
+			});
+	} // Close mediaPlayer Function
 	
+	$('.loadPlayer').click(function() {		
+		mediaPlayer(this);
+	});
 	// ANIMATIONS ------------------------------------
 		
 		var scrollStart = 0;

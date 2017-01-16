@@ -134,6 +134,7 @@ h1.title {
 		display: block;
 		z-index: 5;
 		top:0;
+		opaity: 1;
 	}
 		.scrub_head span {
 			content: "";	
