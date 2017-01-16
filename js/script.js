@@ -27,9 +27,7 @@
 					
 		document.addEventListener("visibilitychange", function() {
 			if ( document.hasFocus() ) {
-    			console.log("YES");
   			} 	else {
-    			console.log("NO");
   			}	
 		});
 		
@@ -168,7 +166,6 @@
 	// LARGE_MAP / MINI_MAP TRANSITION ********************************************************
 	
 		function mapTransition(e) {
-			console.log("clicked");
 			if ( $('.map').hasClass('large_map') ) {
 				$('.story').find('h3').fadeOut(timeIns);
 				$(e).find('.storycontent').removeClass('hidden').queue(function(next) {
@@ -222,17 +219,7 @@
 		
 		docHeight = $(document).height();
 		
-		// LOAD POINTS OF INTEREST --------------------------------------------------
-		
-		for ( i = 0; i < poiCat.length; i++ ) { 
-		
-			var timeAnchor = $(poiCat[i]).attr("data-timeAnchor");
-					
-			var timelinePercentage = (timeAnchor / playerDuration) * 100 + "%";
-					
-			$(poiCat[i]).css({'top': timelinePercentage});
-							
-		}
+		//FUNCTIONS ----------------------------
 		
 		// Every time player updates
 		function timelineUpdate(t) { 
@@ -270,56 +257,10 @@
 			timeline.find('.scrub_head span').css({'height': playerProgress});	
 					
 		} // END timelineUpdate Function
-				
-			// Define and update current time
-		player.on('timeupdate', function() {
-			timelineUpdate();
-		});
-							
-		// SEEKING ****************************************************************
-		var timeDrag = false;   /* Drag status */
 		
-		// On click, send mouse coordinates to update functions
-		$(story + ' .timeline,' + story + ' .timeline span').mousedown(function(e) {
-			if (e.target !== this) return;
-				timeDrag = true;
-				updatePlayer(e.pageY);
-		});
-		
-		$(story + ' .timeline,' + story + ' .timeline span').mouseup(function(e) {
-			if(timeDrag) {
-				timeDrag = false;
-				updatePlayer(e.pageY);
-			}
-		});
-		
-		// On mouse move, move scrub_head and update current time if user clicks
-		timeline.mousemove(function(e) {
-			timeline.find('.scrub_head').css({'top':e.pageY});
-			if(timeDrag) {
-				updatePlayer(e.pageY);
-			}
-		});
-		
-		timeline.mouseenter(function(e) {
-			if (e.target !== this) return;
-			timeline.find('.scrub_head').css({'top':e.pageY});
-		});
-		
-		// Set scrub_head back to current time
-		timeline.mouseleave(function() {
-			timeDrag = false;
-			timelineUpdate();
-		});
-		 
-		var newProgress = 0;
-		var newCurrent = 0;
-		
-		//updatePlayer
-		var updatePlayer = function(x) {
-
-			scrollTop = $(window).scrollTop();	
-			
+		//CalculateTime
+		function playerTime(x) {
+	
 			// window position		
 			x = (x - scrollTop);  
 			// Y position of click on timeline, fraction
@@ -330,44 +271,187 @@
 			
 			// newCurrent time
 			newCurrent = timelineClick * playerDuration;
-									
+			return newCurrent;
+		}
+		
+		//updatePlayer
+		function updatePlayer(x,y) {
+
+			scrollTop = $(window).scrollTop();	
+		
 			//Update progress bar and video currenttime
 			timelineUpdate(newProgress);
-			player[0].currentTime = newCurrent;
-
-		};
+			player[0].currentTime = newCurrent;	
+		}
 		
-		// Move scrub on hover
-		$('.timelime').hover(function(e) {
-			if (e.target !== this) return;
-				timeline.find('.scrub_head').css({'top':newProgress});
+		
+		// TIME UPDATE
+		
+		// Define and update current time
+		player.on('timeupdate', function() {
+			timelineUpdate();
 		});
+		
+		// LOAD POINTS OF INTEREST --------------------------------------------------
+		
+		for ( i = 0; i < poiCat.length; i++ ) { 
+		
+			var timeAnchor = $(poiCat[i]).attr("data-timeAnchor");
+					
+			var timelinePercentage = (timeAnchor / playerDuration) * 100 + "%";
+					
+			$(poiCat[i]).css({'top': timelinePercentage});
+							
+		}
+							
+		// SEEKING / TIMELINE INTERACTION ****************************************************************
+		var timeDrag = false;
+		var newProgress = 0;
+		var newCurrent = 0;
+		
+		
+		
+		
+		// ---------ON CLICK -------------
+		// Mouse Down, set timeDrag to true, updatePlayer
+		$(story + ' .timeline,' + story + ' .timeline span').mousedown(function(e) {
+/**/		if (e.target !== this) return;
+				timeDrag = true;
+				updatePlayer(e.pageY);
+		});
+		
+		
+		// Mouse Up, set timeDrag to false, updatePlayer
+		$(story + ' .timeline,' + story + ' .timeline span').mouseup(function(e) {
+			if(timeDrag) {
+				timeDrag = false;
+				updatePlayer(e.pageY);
+			}
+		});
+		
+		
+		
+		
+		// ---------ON DRAG -------------
+		// On drag, updatePlayer, double check target is target, update scrub head, indicator and time.
+		$(story + ' .timeline,' + story + ' .timeline span').mousemove(function(e) {
+		
+		
+		if(timeDrag) {
+				updatePlayer(e.pageY);
+			}			
+			
+/**/		if (e.target !== this) return;
+			
+			
+			// Update scrub
+			timeline.find('.scrub_head').css({'top':e.pageY});
+			timeline.find('.time_indicator').css({'top':newProgress});	
+			
+			
+			// Format Time
+			var indicatorMinutes = Math.floor(playerTime(e.pageY) / 60);
+			var indicatorSeconds = Math.floor(playerTime(e.pageY) - (60 * indicatorMinutes));
+			var indicatorTime = function() {
+				if (indicatorMinutes < 10) { indicatorMinutes = "0" + indicatorMinutes; }
+				if (indicatorSeconds < 10) { indicatorSeconds = "0" + indicatorSeconds; }
+				return indicatorMinutes + ":" + indicatorSeconds;
+			};
+			timeline.find('.time_indicator p').text(indicatorTime());
+		});
+		
+		
+		
+		
+		// ---------ON HOVER -------------
+		// mouseover check target is target, format scrub_head, and fade in indicator Time.
+		timeline.mouseenter(function(e) {
+/**/		if (e.target !== this) return;
+				timeline.find('.scrub_head').css({'top':e.pageY});
+				timeline.find('.scrub_head').css({'top':newProgress});
+				timeline.find('.indicator_time').fadeIn(1000);
+		});
+		
+		
+		// mouse leave, Set scrub_head back to current time, fade out indicator time 
+		timeline.mouseleave(function() {
+			timeDrag = false;
+			timelineUpdate();
+			timeline.find('.indicator_time').fadeOut(200);
+			
+		});
+		
 		
 		$('.poi').css({'opacity':'1'}).hover(function() {
 			timeline.find('scrub_head').css({'opacity':'0'});
 		});
 		
-		// POI Actions
+		
+		//MOUSEENTER: POI_EXPAND
+		$('.poi, .poi_expand, .time_indicator, p').mouseenter(function() {
+			timeDrag = false;
+		});
+		
+		
+		// CLICK: POI
+		//
+		function expandPOI(thisPOI) {
+			$(timeline).find('.time_indicator').css({
+				'border-bottom-left-radius':'0',
+				'transition':'0.5s',
+				'background-color':'rgba(225,229,202,1.00)',
+				'top':(parseInt($(thisPOI).css('top')) - ($(thisPOI).find('.poi_expand').height() / 2) - 50),'color':'rgba(255,255,255,1)'
+			}).queue(function(next) {
+				$(thisPOI).addClass('poi_active').children().fadeIn(500);
+				next();
+			});	
+			$(thisPOI).find('.poi_expand').css({'border-top-left-radius':'0'});
+		}
+		
+		function contractPOI(thisPOI) {
+			$('.poi').removeClass('poi_active').children().fadeOut(500, function() {
+				$(thisPOI).find('.poi_expand').css({'border-top-left-radius':'20px'});
+				$(timeline).find('.time_indicator').css({'border-bottom-left-radius':'20px','transition':'0.5s', 'background-color':'rgba(0,0,0,0.35)', 'top':parseInt($(thisPOI).css('top'))});
+			});
+		}
+		
+		
 		$('.poi').click(function(e) {
-			if (timeDrag !== true) { 
-				if (e.target !== this) return; // Only continue if click element is exact element (no children)
-					if ( $(this).hasClass('poi_active')) {
-						$('.poi').removeClass('poi_active').children().fadeOut(500);
+			var thisPOI = this;
+			if (timeDrag !== true) { 			
+/**/			if (e.target !== this) return; // Only continue if click element is exact element (no children)
+
+					if ( $(thisPOI).hasClass('poi_active')) {
+						contractPOI(thisPOI);						
 					} else {
 						$('.poi').removeClass('poi_active').children().fadeOut(500);
-						$(this).addClass('poi_active').children().fadeIn(500);
+							
+						if ( (($(thisPOI).find('.poi_expand').height() / 2) + 50	) > parseInt($(this).css('top')) ) {
+							
+							$(thisPOI).find('.poi_expand').css({'top': '20px'});
+							expandPOI(thisPOI);
+							
+						} else if ( (($(this).find('.poi_expand').height() / 2) + 50) > ( winHeight - parseInt($(this).css('top'))) ) {
+							
+							$(thisPOI).find('.poi_expand').css({'top':(winHeight - $(this).height() - 20)+"px"});
+							expandPOI(thisPOI);	
+													
+						} else {
+							expandPOI(thisPOI);
+						}
+						
 					}
 			}
 		});
 		
+		
+		//CLICK: POI_EXPAND
+		//
 		$('.poi_expand').click(function(e) {
-				console.log(e.target);
 			if (e.target === $('.poi_expand p a')) {
-				console.log('if');
 				$('.poi').removeClass('poi_active').children().fadeOut(500);
 				return;
 			} else {
-				console.log('else');
 				newProgress =  parseInt($(this).parent().css('top'), 10) / winHeight;
 				newCurrent = Math.floor( (playerDuration * newProgress) );
 				
@@ -378,8 +462,10 @@
 			}
 		});
 	
-	} // Close mediaPlayer Function
+	} // END mediaPlayer Function
 	
+	
+	//CLICK: LOADPLAYER - INITIATE MEDIAPLAYER
 	$('.loadPlayer').click(function() {		
 		if ($(this).attr("data-story") === "home") {
 			$('.story').css({'display':'none'});
@@ -387,6 +473,7 @@
 			mediaPlayer(this);
 		}
 	});
+	
 	// ANIMATIONS ------------------------------------
 		
 		var scrollStart = 0;

@@ -122,6 +122,36 @@ h1.title {
 .content {
 	margin-left: 50px;
 }
+	.storySection {
+		min-height: 100px;
+		padding: 20px;	
+		text-align: center;
+	}
+	.storyHeader {
+		background-color: rgba(0,0,0,1.00);
+	}
+		.storyHeader h4 {
+			font-size: 40px;
+			color: rgba(255,255,255,1.00);
+			font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+		}
+	.storySummary {
+		background-color: rgba(182,182,182,1.00);
+	}
+	.storyMedia {
+		background-color: rgba(245,250,199,1.00);
+	}
+		.storyMedia h6 {
+			top:-50%;
+			transform: translateY(50%);	
+		}
+	.transcript {
+		background-color: rgba(231,231,231,1.00);
+		text-align: left;
+	}
+	.storyFooter {
+		background-color: rgba(34,34,34,1.00);
+	}
 	
 .timeline {
 	top: 0;
@@ -143,7 +173,7 @@ h1.title {
 		z-index: 5;
 		top:0;
 		opaity: 1;
-		transition: all ease-in-out 0.1s;
+		transition: none;
 	}
 		.scrub_head span {
 			content: "";	
@@ -161,6 +191,26 @@ h1.title {
 		display: block;
 		position: relative;
 	}
+	.time_indicator {
+		content: '';
+		font:Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+		font-weight: 900;
+		font-size: 18px;
+		position: absolute;
+		height: 50px;
+		left: 50px;
+		top: 0%;
+		transform: translateY(-20px); 
+		border-radius: 20px;
+		background-color:rgba(0,0,0,0.35);
+		text-align: center;
+		width: 100px;
+	}
+		.time_indicator p {
+			margin: 0;
+			padding: 10px;
+			color: rgba(247,240,240,1.00);
+		}
 	.poi {
 		position: absolute;
 		width: 20px;
@@ -201,8 +251,9 @@ h1.title {
 			background-color: rgba(225,229,202,1.00);
 			transform: translateY(-50%);
 			margin-top: 50%;
-			left: 6vw;
-			padding: 10px;
+			left: 50px;
+			padding: 30px;
+			border-radius: 20px;
 		}
 			.poi_expand:after {
 				content: "";
@@ -211,7 +262,7 @@ h1.title {
 				display: block;
 				position: absolute;
 				background-color: rgba(225,229,202,1.00);
-				transform: translateY(-50%) translateX(-50%) rotate(45deg);
+				transform: translateY(-50%) translateX(-90%) rotate(45deg);
 				top: 50%;
 				z-index: -1;
 			}
