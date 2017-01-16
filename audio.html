@@ -21,11 +21,21 @@
     <body style="background-color: rgba(243,243,243,1.00)"> 
     
     <!-- CONTENT --------------------------------------------------------------------------------------------------------------------------------------------->
-    <section class="audio" id="audio">
+    	<ul style="float: right;">
+    		<li><a href="#" class="loadPlayer" data-story="story1">STORY 1</a></li>
+            <li><a href="#" class="loadPlayer" data-story="story2">STORY 2</a></li>
+            <li><a href="#" class="loadPlayer" data-story="story3">STORY 3</a></li>
+            <li><a href="#" class="loadPlayer" data-story="story4">STORY 4</a></li>
+            <li><a href="#" class="loadPlayer" data-story="story5">STORY 5</a></li>
+            <li><a href="#" class="loadPlayer" data-story="home">HOME</a></li>
+        </ul>
+        	
+            
+    <section class="story" id="story1">
             
         <div class="timeline">
         
-            <div class="poi" data-timeAnchor="40">
+            <div class="poi" data-timeAnchor="90">
             	<div class="poi_expand">
                 	<h5>POINT OF INTEREST!</h5>
                     <p>This guy is talking about a key point of interest you might want to look more into</p>
@@ -33,7 +43,7 @@
                 </div>
             </div>
         
-            <div class="poi" data-timeAnchor="100">
+            <div class="poi" data-timeAnchor="150">
             	<div class="poi_expand">
                 	<h5>POINT OF INTEREST!</h5>
                     <p>This guy is talking about a key point of interest you might want to look more into</p>
@@ -41,15 +51,7 @@
                 </div>
             </div>
         
-            <div class="poi" data-timeAnchor="180">
-            	<div class="poi_expand">
-                	<h5>POINT OF INTEREST!</h5>
-                    <p>This guy is talking about a key point of interest you might want to look more into</p>
-                    <p>To find out more click this notification, otherwise <a href="#">click here to dismiss it</a></p>
-                </div>
-            </div>
-        
-            <div class="poi" data-timeAnchor="260">
+            <div class="poi" data-timeAnchor="250">
             	<div class="poi_expand">
                 	<h5>POINT OF INTEREST!</h5>
                     <p>This guy is talking about a key point of interest you might want to look more into</p>
@@ -63,8 +65,62 @@
         
         <div class="content">
         
-        	<a href="#" class="loadPlayer" data-story="audio">CLICK HERE</a>
+
+            <div class="audio_player">
+                <audio class="player" controls>
+                    <source src="audio/audioPlaceholder.mp3" type="audio/mp3" />
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
             
+            <div class="header">
+            	STORY 1
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+        </div>
+    </section>
+    
+    <section class="story" id="story2">
+            
+        <div class="timeline">
+        
+            <div class="poi" data-timeAnchor="20">
+            	<div class="poi_expand">
+                	<h5>POINT OF INTEREST!</h5>
+                    <p>This guy is talking about a key point of interest you might want to look more into</p>
+                    <p>To find out more click this notification, otherwise <a href="#">click here to dismiss it</a></p>
+                </div>
+            </div>
+
+            <div class="poi" data-timeAnchor="50">
+            	<div class="poi_expand">
+                	<h5>POINT OF INTEREST!</h5>
+                    <p>This guy is talking about a key point of interest you might want to look more into</p>
+                    <p>To find out more click this notification, otherwise <a href="#">click here to dismiss it</a></p>
+                </div>
+            </div>
+            
+        	<span class="scrub_head"><span></span></span>
+            <span class="scroll_position"></span>
+        </div>
+        
+        <div class="content">
+        
             <div class="audio_player">
                 <audio class="player" controls>
                     <source src="audio/audioPlaceholder.mp3" type="audio/mp3" />
@@ -73,18 +129,186 @@
             </div>
             
             <div class="text">
+            STORY 2
             </div>
             
             <div class="text">
+            Info
             </div>
             
             <div class="text">
+            Info
             </div>
             
             <div class="text">
+            Info
             </div>
             
             <div class="text">
+            Info
+            </div>
+        </div>
+    </section>
+    
+        <section class="story" id="story3">
+            
+        <div class="timeline">
+        
+            <div class="poi" data-timeAnchor="15">
+            	<div class="poi_expand">
+                	<h5>POINT OF INTEREST!</h5>
+                    <p>This guy is talking about a key point of interest you might want to look more into</p>
+                    <p>To find out more click this notification, otherwise <a href="#">click here to dismiss it</a></p>
+                </div>
+            </div>
+        
+            <div class="poi" data-timeAnchor="80">
+            	<div class="poi_expand">
+                	<h5>POINT OF INTEREST!</h5>
+                    <p>This guy is talking about a key point of interest you might want to look more into</p>
+                    <p>To find out more click this notification, otherwise <a href="#">click here to dismiss it</a></p>
+                </div>
+            </div>
+            
+        	<span class="scrub_head"><span></span></span>
+            <span class="scroll_position"></span>
+        </div>
+        
+        <div class="content">
+        
+            <div class="audio_player">
+                <audio class="player" controls>
+                    <source src="audio/audioPlaceholder.mp3" type="audio/mp3" />
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            
+            <div class="text">
+            STORY 3
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+        </div>
+    </section>
+        <section class="story" id="story4">
+            
+        <div class="timeline">
+        
+            <div class="poi" data-timeAnchor="40">
+            	<div class="poi_expand">
+                	<h5>POINT OF INTEREST!</h5>
+                    <p>This guy is talking about a key point of interest you might want to look more into</p>
+                    <p>To find out more click this notification, otherwise <a href="#">click here to dismiss it</a></p>
+                </div>
+            </div>
+
+            <div class="poi" data-timeAnchor="160">
+            	<div class="poi_expand">
+                	<h5>POINT OF INTEREST!</h5>
+                    <p>This guy is talking about a key point of interest you might want to look more into</p>
+                    <p>To find out more click this notification, otherwise <a href="#">click here to dismiss it</a></p>
+                </div>
+            </div>
+            
+        	<span class="scrub_head"><span></span></span>
+            <span class="scroll_position"></span>
+        </div>
+        
+        <div class="content">
+        
+            <div class="audio_player">
+                <audio class="player" controls>
+                    <source src="audio/audioPlaceholder.mp3" type="audio/mp3" />
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            
+            <div class="text">
+            STORY 4
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+        </div>
+    </section>
+        <section class="story" id="story5">
+            
+        <div class="timeline">
+        
+            <div class="poi" data-timeAnchor="110">
+            	<div class="poi_expand">
+                	<h5>POINT OF INTEREST!</h5>
+                    <p>This guy is talking about a key point of interest you might want to look more into</p>
+                    <p>To find out more click this notification, otherwise <a href="#">click here to dismiss it</a></p>
+                </div>
+            </div>
+        
+            <div class="poi" data-timeAnchor="200">
+            	<div class="poi_expand">
+                	<h5>POINT OF INTEREST!</h5>
+                    <p>This guy is talking about a key point of interest you might want to look more into</p>
+                    <p>To find out more click this notification, otherwise <a href="#">click here to dismiss it</a></p>
+                </div>
+            </div>
+            
+        	<span class="scrub_head"><span></span></span>
+            <span class="scroll_position"></span>
+        </div>
+        
+        <div class="content">
+        
+            <div class="audio_player">
+                <audio class="player" controls>
+                    <source src="audio/audioPlaceholder.mp3" type="audio/mp3" />
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+            
+            <div class="text">
+            STORY 5
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
+            </div>
+            
+            <div class="text">
+            Info
             </div>
         </div>
     </section>

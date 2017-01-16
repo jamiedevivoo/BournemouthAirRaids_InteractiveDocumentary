@@ -23,6 +23,10 @@ body {
 	margin: 0 auto;
 }
 
+section {
+	display: none;	
+}
+
 .fixed {
 	position: fixed;	
 }
@@ -120,11 +124,15 @@ h1.title {
 }
 	
 .timeline {
+	top: 0;
 	position: fixed;
 	height: 100vh;
 	width: 50px;
 	background-color:rgba(200,200,200,1.00);
-		cursor: pointer;
+	cursor: pointer;
+}
+.content {
+	margin-left: 50px;
 }
 	.scrub_head {
 		height: 4px;
@@ -135,6 +143,7 @@ h1.title {
 		z-index: 5;
 		top:0;
 		opaity: 1;
+		transition: all ease-in-out 0.1s;
 	}
 		.scrub_head span {
 			content: "";	
@@ -143,13 +152,14 @@ h1.title {
 			position: fixed;
 			top:0;
 			background-color:rgba(0,0,0,0.30);
+			transition: all ease-in-out 0.2s;
 		}
 	.scroll_position {
 		height: 5px;
 		width: 100%;
 		background-color: rgba(0,0,0,1);
 		display: block;
-		position: absolute;
+		position: relative;
 	}
 	.poi {
 		position: absolute;
@@ -181,8 +191,8 @@ h1.title {
 			height: 50px;
 			background-color: rgba(255,237,0,1.00);	
 		}
-		.poi_past {
-		background-color: rgba(4,30,120,1.00);
+		.poi_viewed {
+		background-color: rgba(190,190,190,1.00);
 		}
 		.poi_expand {
 			display: none;
