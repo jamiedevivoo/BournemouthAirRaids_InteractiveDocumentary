@@ -97,14 +97,8 @@ h1.title {
 	}
 .story {
 	z-index: 2;
+	display: none;
 }
-	.story h3 p a p ap  {
-		z-index: 6;	
-		width: 200px;
-		height: 200px;
-		background-color: rgba(15,0,0,1.00);
-		border-radius: 25px;
-	}
 	.story .storycontent {
 		position: absolute;
 		width: 100vw;
@@ -121,6 +115,8 @@ h1.title {
 	}
 .content {
 }
+
+
 	.storySection {
 		min-height: 100px;
 		padding: 50px 100px;	
@@ -138,10 +134,75 @@ h1.title {
 	.storySection p {
 		text-align: justify;
 	}
+
+	#story1 {
+
+	}
+		#story1 .storyHeader {
+			background-image:url(../images/story1_ron.jpeg);
+		}
+			#story1 h3 {
+				background: -webkit-linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story1_ron.jpeg);
+				background: -o-linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story1_ron.jpeg);
+				background: linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story1_ron.jpeg);
+				
+			   	background-attachment: fixed;
+			   	-webkit-text-fill-color: transparent;
+			   	-webkit-background-clip: text;
+			}
+
+	#story2 {
+		
+	}
+		#story1 .storyHeader {
+			background-image: url(../images/story2_john.jpeg);
+		}
+			#story2 h3 {
+				background: -webkit-linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story2_john.jpeg);
+				background: -o-linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story2_john.jpeg);
+				background: linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story2_john.jpeg);
+				
+			   	background-attachment: fixed;
+			   	-webkit-text-fill-color: transparent;
+			   	-webkit-background-clip: text;
+			}
+
+	#story3 {
+
+	}
+		#story1 .storyHeader {
+			background-image: url(../images/story3_mikeReverse.png);
+		}
+			#story3 h3 {
+				background: -webkit-linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story3_mikeReverse.png);
+				background: -o-linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story3_mikeReverse.png);
+				background: linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story3_mikeReverse.png);
+				
+			   	background-attachment: fixed;
+			   	-webkit-text-fill-color: transparent;
+			   	-webkit-background-clip: text;
+			}
+
+	#story4 {
+
+	}
+		#story1 .storyHeader {
+			background-image: url(../images/story4_vernon.jpeg);
+		}
+			#story4 h3 {
+				background: -webkit-linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story4_vernon.jpeg);
+				background: -o-linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story4_vernon.jpeg);
+				background: linear-gradient(#eee, rgba(255,255,255,0.1), #de7006),url(../images/story4_vernon.jpeg);
+				
+			   	background-attachment: fixed;
+			   	-webkit-text-fill-color: transparent;
+			   	-webkit-background-clip: text;
+			}
+
 	.storyHeader {
 		background-color: rgba(0,0,0,1.00);
 		height: 100vh;
-		opacity: 0.65;
+		opacity: 0.9;
 		background-attachment: fixed;
 		background-position: center;
 		background-repeat: no-repeat;
@@ -152,13 +213,11 @@ h1.title {
 			display: block;
 			position: relative;
 			margin: 0 auto;
+			max-width: 80%;
+			top: 20%;
 		}
 		.storyHeader h3 {
-			background: linear-gradient(to bottom, #eee, rgba(222,112,6,0.0), #de7006),url(../images/Ron.jpeg);
-  
-		   background-attachment: fixed;
-		   -webkit-text-fill-color: transparent;
-		   -webkit-background-clip: text;
+			
 		   background-position: center;
 		   background-repeat: no-repeat;
 		   background-size: cover;
@@ -168,51 +227,91 @@ h1.title {
 	       font: "Lato", sans-serif;
 	       color: #fff;
    	       padding: 20px;		  
-		   font-size: 12vw;
+		   font-size: 5vw;
 		   font-weight: bold;
 		   text-align: center;
 		}
-		.continue, .content a {
+		.continue {
 			position: absolute;
-			bottom: 10px;
-			left: 50%;
-			transform: translateX(-50%);
+			bottom: -1px;
+			right: 0;
+			left: 0;
 			cursor: pointer;
+			padding: 10px;
 			line-height: 60px;
 			font-size: 50px;
 			color: rgba(255,255,255,1.00);
 			display: block;
+			background-color: rgba(255,255,255,0.10);
+			text-align: center;
+			width: 100%;
+			transition: all ease-in-out 1s;
 		}
 		.continue:hover {
-			transition: all ease-in-out 1s;
-			line-height: 40px;
+			line-height: 50px;
+			padding-bottom: 1px;
+		}
+		.continue:hover > p span {
+			line-height: 30px;	
+		}
+		.continue p {
+		text-align: center;
 		}
 		.continue p span {
+			position: relative;
 			display: block;	
+			margin: 0 auto;
+			transition: all ease-in-out 1s;
 		}
 		
 	.storySummary {
 		background-color: rgba(182,182,182,1.00);
 		min-height: 300px;
 	}
+.storySummary {
+	font-size: 24px;
+}
 	.storyMedia {
 		min-height: 200px;
-	   background-attachment: fixed;
-	   background-position: center;
-	   background-repeat: no-repeat;
-	   background-size: cover;	
+	   	background-attachment: fixed;
+	   	background-position: center;
+	   	background-repeat: no-repeat;
+	   	background-size: cover;	
 	 }
-		.storyMedia h6 {
-			font-size: 36px;
-			position: relative;
-			top:50%;
-			transform: translateY(-50%);	
-			color: rgba(255,255,255,1.00);
+		.storyMedia span {
+			background-color: rgba(0,0,0,0.3);
+			display: block;
+			padding: 10px;
+			position:  relative;
 		}
+		.storyMedia h6 {
+			font-family: "Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, "sans-serif";
+			font-size: 40px;
+			position: relative;
+			color: rgba(255,255,255,1.00);
+			text-align: center;
+		}
+		.storyMedia.largeMedia {
+			height: 100vh;	
+		}
+		.storyMedia.largeMedia span {
+			min-height: 50%;
+			top: 50%;
+			transform: translateY(-50%);
+			padding: 30px;
+		}
+		.storyMedia.largeMedia span h4 {
+			color: #fff;
+			padding: 20px;
+		}
+
 	.transcript {
 		background-color: rgba(231,231,231,1.00);
 		text-align: left;
-		min-height: 500px;
+		min-height: 200px;
+	}
+	.transcript p {
+		font-size: 24px;
 	}
 	.storyFooter {
 		background-color: rgba(34,34,34,1.00);
@@ -226,7 +325,7 @@ h1.title {
 	position: fixed;
 	height: 100%;
 	width: 50px;
-	background-color:rgba(200,200,200,0.80);
+	background-color:rgba(200,200,200,0.50);
 	cursor: pointer;
 	z-index: 9;
 }
@@ -234,6 +333,15 @@ h1.title {
 		width: 10px;
 		background-color: rgba(255,255,255,0.00);
 	}
+.currentTime {
+	position: absolute;
+	top: 10px;
+}
+.totalTime {
+	position: absolute;
+	width: 50%;
+	bottom: 40px;
+}
 .toggleState {
 	width: 50px;
 	height: 50px;
@@ -257,16 +365,24 @@ h1.title {
 	.timeline .scrubHead {
 		top: 0;
 		left: 0;
-		height: 40px;
+		height: 5px;
 		transform: translateY(-50%);
 		width: 100%;
 		background-color: rgba(193,34,36,1.00);
 		position: absolute;
 		display: block;
 		z-index: 5;
-		opaity: 1;
-		transition: all ease-in-out 0.1s;
+		opacity: 1;
+		transition: height 0.1s ease-in-out;
+		transition: background-color 0.5 ease-in-out;
 	}
+		.timeline .scrubHead.active {
+			height: 40px;
+		}
+			.timeline .scrubHead.active.overPOI {
+				height: 20px;
+				background-color:rgba(0,0,0,0.10)
+			}		
 		.timeline .scrubed {
 			content: "";	
 			width: 50px;
@@ -274,7 +390,7 @@ h1.title {
 			top: 0;
 			left: 0;
 			position: absolute;
-			background-color:rgba(255,255,255,1);
+			background-color:rgba(255,255,255,0.8);
 		}
 	.scrollPosition {
 		height: 4px;
@@ -303,7 +419,7 @@ h1.title {
 		text-align: center;
 		width: 100px;
 		color: rgba(247,240,240,1.00);
-		transition: all ease-in-out 0.1s;
+		display: none;
 	}
 		.timeIndicator .activePOI {
 			border-bottom-left-radius:0;
@@ -375,12 +491,13 @@ h1.title {
 				top: 50%;
 				z-index: -1;
 			}
-.audio {
-	
-}
-	.audio_player {
-		
-	}
-.video {
-	
+video.player {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	min-height: 100vh;
+	margin: 0;
+	padding: 0;
+	z-index: -9;
 }

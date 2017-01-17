@@ -265,12 +265,7 @@
 		var timeIndicator = $(story+' .timeline .timeIndicator');
 		var scrollIndicator = $(story+' .scrollPosition');
 		var poiCat = $( story + " .poi" ).toArray();
-		var storyMedia = $( story + " .storyMedia" ).toArray();
-		
-		// Define Player Duration
-		player.on('loadedmetadata', function() {
-			playerDuration = player[0].duration;
-		});
+	
 		
 		// Display
 		$('.story').css({'display':'none'});
@@ -285,6 +280,15 @@
 			$(this).remove();
 		});
 		
+		$(window).on('scroll', function () {
+			$('.storySection').css({'display':'block'});
+			/*
+			$(this).parent('.storySection').next('.storySection').css({'display':'block'}).next('.storySection').css({'display':'block'});
+			*/
+			$(story).find('.continue').remove();		
+		});
+		
+		
 		// Update docHeight
 		
 		docHeight = 0;
@@ -293,37 +297,48 @@
 		});
 		
 		
+		function formatTime(s) {
+
+			var indicatorMinutes = Math.floor((playerTime(s)) / 60);
+			var indicatorSeconds = Math.floor((playerTime(s)) - (60 * indicatorMinutes));
+
+			var time = function() {
+				if (indicatorMinutes < 10) { indicatorMinutes = "0" + indicatorMinutes; }
+				if (indicatorSeconds < 10) { indicatorSeconds = "0" + indicatorSeconds; }
+				return indicatorMinutes + ":" + indicatorSeconds;
+			};
+			return time;
+		}
 		
-		
+		// Define Player Duration
+		player.on('loadedmetadata', function() {
+			playerDuration = player[0].duration;
+			$(story+' .totalTime').html(formatTime(player[0].duration));
+		});
 		
 		
 		//FUNCTIONS -----------------------------------------------------------------------
 				
 																			//CalculateTime
-		function playerTime(x) {
+		
+		function offsetScroll(x) {
 			// window position		
 			x = (x - ($(timeline).offset().top)); 
-						
-			newCurrent = fraction(x,$(timeline).height()) * playerDuration;
+			return x;
+		}
+		function playerTime(x) {
+			newCurrent = fraction(offsetScroll(x),$(timeline).height()) * playerDuration;
+			updateTimeline(newCurrent);
 			return newCurrent;
 		}
-		
-		
-		
-		
 		
 
 																			//updatePlayer
 		function updatePlayer(newCurrent) {
-		
 			//Update progress bar and video currenttime
 			player[0].currentTime = newCurrent;
 									
-		}
-		
-		
-		
-		
+		}		
 		
 		
 		
@@ -336,7 +351,6 @@
 				playerCurrent = player[0].currentTime;
 				var timeFraction = (playerCurrent / playerDuration);
 				playerProgress = timeFraction * ($(timeline).height() / 100);
-				console.log(playerProgress);
 				
 				// Every time the player updates, loop through all POI's  
 				for ( i = 0; i < poiCat.length; i++ ) { 
@@ -356,41 +370,47 @@
 						$(thisPOI).removeClass('poi_active');
 						$(thisPOI).children().fadeOut(500);			
 					}
-				} // End FOR		
-
-				$(scrubHead).css({'top': playerProgress + "px"});
+				} // End FOR	
+				if (!scrubbing) {updateScrub(playerProgress);}
 				$(scrubed).css({'height': playerProgress + "px"});	
 			}
+		
+			$(story+' .currentTime').html(formatTime(player[0].currentTime));
+
 					
 		} // END updateTimeline Function
 		
 		
 		
-		function updateIndicator(time) {
-			if (time === 0) {
+		function updateIndicator(y) {
+			if (y === 0) {
 				$(timeIndicator).fadeOut(200);
 			} else {
-				if (lockIndicator === 0) {
+				if (!lockIndicator) {
 					
-					var playerProgress = ((time / playerDuration) * $(timeline).height());
-
+					var indicatorTime = formatTime(y);					
+					
+					var playerProgress = offsetScroll(y);
+					
+					if (playerProgress < 20) { playerProgress = 20; } 
+					else if (($(timeline).height() - playerProgress) < 20) { playerProgress = $(timeline).height() - 20; }
+					
 					$(timeIndicator).fadeIn(200).css({'top':playerProgress+"px"});
 				
-					// Format Time
-					var indicatorMinutes = Math.floor(time / 60);
-					var indicatorSeconds = Math.floor(time - (60 * indicatorMinutes));
-					
-					var indicatorTime = function() {
-						if (indicatorMinutes < 10) { indicatorMinutes = "0" + indicatorMinutes; }
-						if (indicatorSeconds < 10) { indicatorSeconds = "0" + indicatorSeconds; }
-						return indicatorMinutes + ":" + indicatorSeconds;
-					};
+
 					
 					$(timeIndicator).find('p').text(indicatorTime());			
 				}
 			}
-		
-		
+		}
+			
+		function updateScrub(p) {
+			if (p < 20) { p = 0; }
+			else if (($(timeline).height() - p) < 20) {
+				p = $(timeline).height() - ($(scrubHead).height() / 2);
+			}
+			$(scrubHead).css({'top':p+'px'});
+		}
 		
 		//Expand POI Function
 		function expandPOI(thisPOI) {
@@ -400,7 +420,7 @@
 				next();
 			});	
 			$(thisPOI).find('.poi_expand').css({'border-top-left-radius':'0'});
-			lockIndicator = 1;
+			lockIndicator = true;
 		}
 		
 		//Contract POI Function
@@ -410,12 +430,10 @@
 				$(timeIndicator).removeClass('activePOI');
 				$(timeIndicator).css({'top':parseInt($(thisPOI).css('top'))});
 			});
-			lockIndicator = 0;
+			lockIndicator = false;
 		}
 		
-				
-	}
-		
+						
 		
 		
 		
@@ -426,7 +444,7 @@
 		
 		// Define and update current time
 		player.on('timeupdate', function() {
-			updateTimeline();
+			updateTimeline();			
 		});
 		
 		// LOAD POINTS OF INTEREST --------------------------------------------------
@@ -445,7 +463,8 @@
 		var timeDrag = false;
 		var newProgress = 0;
 		var newCurrent = 0;
-		var lockIndicator = 0;		
+		var lockIndicator = false;	
+		var scrubbing = false;	
 		
 		
 		
@@ -459,7 +478,7 @@
 		$(timeline).mousedown(function(e) {
 /**/		if (e.target !== this) return;
 				timeDrag = true;
-				updateIndicator(playerTime(e.pageY));
+				updateIndicator(e.pageY);
 		});
 		
 		
@@ -468,19 +487,12 @@
 			if(timeDrag) {
 				timeDrag = false;
 				updateIndicator(0);
-				updateTimeline(	playerTime(e.pageY));
-				updatePlayer(playerTime(e.pageY));			
+				updatePlayer(playerTime(e.pageY));	
 			}
 		});
 		
 		
-		
-		
-		
-		
-		
-		
-		
+			
 		// ---------ON DRAG -------------
 		// On drag, updatePlayer, double check target is target, update scrub head, indicator and time.
 		$(timeline, story + ' .timeline div').mousemove(function(e) {
@@ -489,13 +501,11 @@
 				updateTimeline(	playerTime(e.pageY));
 				updatePlayer(playerTime(e.pageY));	
 			}			
-			
-/**/		if (e.target !== this) return;
-			
+						
 			// Update scrub
 			
-			$(scrubHead).css({'top':e.pageY + "px"});	
-			updateIndicator(playerTime(e.pageY));
+			updateScrub(offsetScroll(e.pageY));
+			updateIndicator(e.pageY);
 		});
 		
 		
@@ -508,46 +518,35 @@
 		
 		// ---------ON HOVER -------------
 		// mouseover check target is target, format scrub_head, and fade in indicator Time.
-		$('.timeline').mouseenter(function(e) {
-			updateIndicator(playerTime(e.pageY));
-
-/**/		if (e.target !== this) return;
-				
-				$(scrubHead).css({'top':(playerTime(e.pageY) / playerDuration) + "px"});	
-				
+		$('.timeline, .scrubHead, .scrub').mousemove(function(e) {
+			scrubbing = true;
+			$(scrubHead).addClass('active');
+			updateIndicator(e.pageY);
+			updateScrub(offsetScroll(e.pageY));	
 		});
-		
-		
 		// mouse leave, Set scrub_head back to current time, fade out indicator time 
-		$('.timeline').mouseleave(function(e) {
+		$($(timeline)).mouseleave(function() {
+			$(scrubHead).removeClass('active');
+			scrubbing = false;
 			timeDrag = false;
-			updateTimeline(playerTime(e.pageY));
+			updateTimeline();
 			updateIndicator(0);
-			$(scrubHead).css({top:(playerTime / playerDuration) * $(timeline).height()});
 		});
-		
-		
-		$('.poi').css({'opacity':'1'}).hover(function() {
-			$(timeIndicator).css({top:$(this).css('top')});
-		});
-		
 		
 		//MOUSEENTER: POI
 		$('.poi').mouseenter(function() {
 			timeDrag = false;
+			$(timeIndicator).css({top:$(this).css('top')});
 			$(timeIndicator).css({'background-color':'rgba(158,146,0,1.00)'});
+			$(scrubHead).addClass('overPOI');
+			lockIndicator = true;
 		});
 		$('.poi').mouseleave(function() {
 			timeDrag = false;
+			updateIndicator();
 			$(timeIndicator).css({'background-color':'rgba(193,34,36,1.00)'});
-		});
-		
-		
-		//MOUSEENTER: POI_EXPAND
-		$('.poi_expand, .time_indicator, p').mouseenter(function() {
-			timeDrag = false;
-			$(scrubHead).css({'opacity':'0'});
-			$(timeIndicator).fadeOut(200);	
+			$(scrubHead).removeClass('overPOI');
+			lockIndicator = false;
 		});
 		
 		
