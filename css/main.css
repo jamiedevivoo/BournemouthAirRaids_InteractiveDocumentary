@@ -6,7 +6,7 @@
 
 body {
 	background-color: rgba(0,0,0,1);	
-	height: 2000px;
+    overflow-y: scroll;
 }
 
 /* GENERAL ELEMENTS */
@@ -98,7 +98,7 @@ h1.title {
 .story {
 	z-index: 2;
 }
-	.story h3 {
+	.story h3 p a p ap  {
 		z-index: 6;	
 		width: 200px;
 		height: 200px;
@@ -123,30 +123,96 @@ h1.title {
 }
 	.storySection {
 		min-height: 100px;
-		padding: 20px;	
+		padding: 50px 100px;	
 		text-align: center;
+		display: none;
+	}
+	.storySection h4 {
+		margin-top: -30px;
+		line-height: 12vw;	
+		font-size: 10vw;
+		text-align: center;
+		font-weight: 900;
+		color: rgba(0,0,0,0.2);
+	}
+	.storySection p {
+		text-align: justify;
 	}
 	.storyHeader {
 		background-color: rgba(0,0,0,1.00);
+		height: 100vh;
+		opacity: 0.65;
+		background-attachment: fixed;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
 	}
-		.storyHeader h4 {
-			font-size: 40px;
-			color: rgba(255,255,255,1.00);
-			font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+		.storyHeader > span {
+			background-color: rgba(0,0,0,0.90);
+			display: block;
+			position: relative;
+			margin: 0 auto;
 		}
+		.storyHeader h3 {
+			background: linear-gradient(to bottom, #eee, rgba(222,112,6,0.0), #de7006),url(../images/Ron.jpeg);
+  
+		   background-attachment: fixed;
+		   -webkit-text-fill-color: transparent;
+		   -webkit-background-clip: text;
+		   background-position: center;
+		   background-repeat: no-repeat;
+		   background-size: cover;
+	
+	       letter-spacing: 5px;
+	       text-transform: uppercase;
+	       font: "Lato", sans-serif;
+	       color: #fff;
+   	       padding: 20px;		  
+		   font-size: 12vw;
+		   font-weight: bold;
+		   text-align: center;
+		}
+		.continue, .content a {
+			position: absolute;
+			bottom: 10px;
+			left: 50%;
+			transform: translateX(-50%);
+			cursor: pointer;
+			line-height: 60px;
+			font-size: 50px;
+			color: rgba(255,255,255,1.00);
+			display: block;
+		}
+		.continue:hover {
+			transition: all ease-in-out 1s;
+			line-height: 40px;
+		}
+		.continue p span {
+			display: block;	
+		}
+		
 	.storySummary {
 		background-color: rgba(182,182,182,1.00);
+		min-height: 300px;
 	}
 	.storyMedia {
-		background-color: rgba(245,250,199,1.00);
-	}
+		min-height: 200px;
+	   background-attachment: fixed;
+	   background-position: center;
+	   background-repeat: no-repeat;
+	   background-size: cover;	
+	 }
 		.storyMedia h6 {
-			top:-50%;
-			transform: translateY(50%);	
+			font-size: 36px;
+			position: relative;
+			top:50%;
+			transform: translateY(-50%);	
+			color: rgba(255,255,255,1.00);
 		}
 	.transcript {
 		background-color: rgba(231,231,231,1.00);
 		text-align: left;
+		min-height: 500px;
 	}
 	.storyFooter {
 		background-color: rgba(34,34,34,1.00);
@@ -162,6 +228,7 @@ h1.title {
 	width: 50px;
 	background-color:rgba(200,200,200,0.80);
 	cursor: pointer;
+	z-index: 9;
 }
 	.timeline.autohide {
 		width: 10px;
@@ -180,6 +247,7 @@ h1.title {
 	text-align: center;
 	font-size: 30px;
 	position: fixed;
+	z-index: 10;
 }
 .toggleState:hover {
 	background-color:rgba(75,75,75,1.00);	
@@ -189,14 +257,15 @@ h1.title {
 	.timeline .scrubHead {
 		top: 0;
 		left: 0;
-		height: 30px;
+		height: 40px;
 		transform: translateY(-50%);
 		width: 100%;
 		background-color: rgba(193,34,36,1.00);
-		position: relative;
+		position: absolute;
 		display: block;
 		z-index: 5;
 		opaity: 1;
+		transition: all ease-in-out 0.1s;
 	}
 		.timeline .scrubed {
 			content: "";	
@@ -204,34 +273,37 @@ h1.title {
 			height: 0%;
 			top: 0;
 			left: 0;
-			position: relative;
+			position: absolute;
 			background-color:rgba(255,255,255,1);
 		}
 	.scrollPosition {
-		height: 5px;
+		height: 4px;
 		width: 100%;
-		background-color: rgba(0,0,0,1);
+		left: 0;
+		top: 0;
+		background-color: rgba(239,232,174,1.00);
 		display: block;
-		position: relative;
+		position: absolute;
 	}
 	.timeIndicator {
 		content: '';
 		font:Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
 		font-weight: 900;
 		font-size: 18px;
-		position: relative;
+		position: absolute;
 		height: 40px;
 		left: 50px;
-		top: 0%;
+		top: 0;
 		transform: translateY(-50%);
 		border-bottom-left-radius: 0;
 		border-top-left-radius: 0;
 		border-top-right-radius: 20px;
 		border-bottom-right-radius: 20px;
-		background-color:rgba(0,0,0,0.35);
+		background-color: rgba(193,34,36,1.00);
 		text-align: center;
 		width: 100px;
 		color: rgba(247,240,240,1.00);
+		transition: all ease-in-out 0.1s;
 	}
 		.timeIndicator .activePOI {
 			border-bottom-left-radius:0;

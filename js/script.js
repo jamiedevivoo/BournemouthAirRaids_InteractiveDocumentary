@@ -265,6 +265,7 @@
 		var timeIndicator = $(story+' .timeline .timeIndicator');
 		var scrollIndicator = $(story+' .scrollPosition');
 		var poiCat = $( story + " .poi" ).toArray();
+		var storyMedia = $( story + " .storyMedia" ).toArray();
 		
 		// Define Player Duration
 		player.on('loadedmetadata', function() {
@@ -274,15 +275,22 @@
 		// Display
 		$('.story').css({'display':'none'});
 		$(story).css({'display':'block'});
+		$(story).find('.storySection').first().css({'display':'block'}).hide().fadeIn();
 		
-		// Update docHeight now that section is displayed
+		$(story).find('.continue').click(function() {
+			$('.storySection').css({'display':'block'});
+			/*
+			$(this).parent('.storySection').next('.storySection').css({'display':'block'}).next('.storySection').css({'display':'block'});
+			*/
+			$(this).remove();
+		});
 		
-		docHeight = $(document).height();
+		// Update docHeight
 		
-		
-		
-		
-		
+		docHeight = 0;
+		$(story + ' .storySection').each(function() {
+			docHeight += $(this).outerHeight(true);
+		});
 		
 		
 		
@@ -310,14 +318,7 @@
 		
 			//Update progress bar and video currenttime
 			player[0].currentTime = newCurrent;
-			
-			newProgress = Math.floor((newCurrent / playerDuration) * 100);
-			timelineUpdate(newProgress);
-			
-			console.log("NEW PROGRESS: " + newProgress);
-			
-			return newProgress;
-
+									
 		}
 		
 		
@@ -327,13 +328,15 @@
 		
 		
 		// When player Updates Time, if value is parsed to it - it will be used to update timeline, otherwise the current time will be calculated
-		function timelineUpdate(newProgress) { 
+		function updateTimeline(newCurrent) { 
 			
 			if (typeof t !== 'undefined') {
-				playerProgress = newProgress;
+				playerProgress = (newCurrent / playerDuration) * $(timeline).height();
 			} else {
 				playerCurrent = player[0].currentTime;
-				playerProgress = Math.floor((playerCurrent / playerDuration) * 100) + "%";
+				var timeFraction = (playerCurrent / playerDuration);
+				playerProgress = timeFraction * ($(timeline).height() / 100);
+				console.log(playerProgress);
 				
 				// Every time the player updates, loop through all POI's  
 				for ( i = 0; i < poiCat.length; i++ ) { 
@@ -341,8 +344,8 @@
 					
 					// Establish the range of each POI		
 					var poiRange = [
-						(parseInt($(thisPOI).attr("data-timeAnchor")) - ((33 / winHeight) * 100)), 
-						(parseInt($(thisPOI).attr("data-timeAnchor")) + ((35 / winHeight) * 100))
+						(parseInt($(thisPOI).attr("data-timeAnchor")) - (($(thisPOI).height / 2) + 5)), 
+						(parseInt($(thisPOI).attr("data-timeAnchor")) + (($(thisPOI).height / 2) + 5))
 					];
 					
 					// If current time is within range, activate POI, otherwise hide it
@@ -353,16 +356,39 @@
 						$(thisPOI).removeClass('poi_active');
 						$(thisPOI).children().fadeOut(500);			
 					}
-				} // End FOR			
+				} // End FOR		
+
+				$(scrubHead).css({'top': playerProgress + "px"});
+				$(scrubed).css({'height': playerProgress + "px"});	
 			}
-			$(scrubHead).css({'top': playerProgress});
-			$(scrubed).css({'height': playerProgress});	
 					
-		} // END timelineUpdate Function
+		} // END updateTimeline Function
 		
 		
 		
-		
+		function updateIndicator(time) {
+			if (time === 0) {
+				$(timeIndicator).fadeOut(200);
+			} else {
+				if (lockIndicator === 0) {
+					
+					var playerProgress = ((time / playerDuration) * $(timeline).height());
+
+					$(timeIndicator).fadeIn(200).css({'top':playerProgress+"px"});
+				
+					// Format Time
+					var indicatorMinutes = Math.floor(time / 60);
+					var indicatorSeconds = Math.floor(time - (60 * indicatorMinutes));
+					
+					var indicatorTime = function() {
+						if (indicatorMinutes < 10) { indicatorMinutes = "0" + indicatorMinutes; }
+						if (indicatorSeconds < 10) { indicatorSeconds = "0" + indicatorSeconds; }
+						return indicatorMinutes + ":" + indicatorSeconds;
+					};
+					
+					$(timeIndicator).find('p').text(indicatorTime());			
+				}
+			}
 		
 		
 		
@@ -386,28 +412,9 @@
 			});
 			lockIndicator = 0;
 		}
-		function updateIndicator(time) {
-			if (time === 0) {
-				$(timeIndicator).fadeOut(200);
-			} else {
-				if (lockIndicator === 0) {
-					$(timeIndicator).fadeIn(200);
-					$(timeIndicator).css({'top':percentage(time,playerDuration)});	
+		
 				
-					// Format Time
-					var indicatorMinutes = Math.floor(time / 60);
-					var indicatorSeconds = Math.floor(time - (60 * indicatorMinutes));
-					
-					var indicatorTime = function() {
-						if (indicatorMinutes < 10) { indicatorMinutes = "0" + indicatorMinutes; }
-						if (indicatorSeconds < 10) { indicatorSeconds = "0" + indicatorSeconds; }
-						return indicatorMinutes + ":" + indicatorSeconds;
-					};
-					
-					$(timeIndicator).find('p').text(indicatorTime());			
-				}
-			}
-		}
+	}
 		
 		
 		
@@ -419,7 +426,7 @@
 		
 		// Define and update current time
 		player.on('timeupdate', function() {
-			timelineUpdate();
+			updateTimeline();
 		});
 		
 		// LOAD POINTS OF INTEREST --------------------------------------------------
@@ -452,7 +459,7 @@
 		$(timeline).mousedown(function(e) {
 /**/		if (e.target !== this) return;
 				timeDrag = true;
-				updateIndicator(updatePlayer(playerTime(e.pageY)));
+				updateIndicator(playerTime(e.pageY));
 		});
 		
 		
@@ -460,9 +467,10 @@
 		$(timeline, story + ' .timeline div').mouseup(function(e) {
 			if(timeDrag) {
 				timeDrag = false;
-				updatePlayer(playerTime(e.pageY));
+				updateIndicator(0);
+				updateTimeline(	playerTime(e.pageY));
+				updatePlayer(playerTime(e.pageY));			
 			}
-			updateIndicator(0); 
 		});
 		
 		
@@ -478,15 +486,16 @@
 		$(timeline, story + ' .timeline div').mousemove(function(e) {
 		
 		if(timeDrag) {
-				updatePlayer(playerTime(e.pageY));
+				updateTimeline(	playerTime(e.pageY));
+				updatePlayer(playerTime(e.pageY));	
 			}			
 			
 /**/		if (e.target !== this) return;
 			
 			// Update scrub
-			$(scrubHead).css({'top':e.pageY});	
 			
-			updateIndicator(playerTime(e.pageY));		
+			$(scrubHead).css({'top':e.pageY + "px"});	
+			updateIndicator(playerTime(e.pageY));
 		});
 		
 		
@@ -499,29 +508,43 @@
 		
 		// ---------ON HOVER -------------
 		// mouseover check target is target, format scrub_head, and fade in indicator Time.
-		$(timeline).mouseenter(function(e) {
+		$('.timeline').mouseenter(function(e) {
 			updateIndicator(playerTime(e.pageY));
+
 /**/		if (e.target !== this) return;
-				$(scrubHead).css({'top':newProgress});
+				
+				$(scrubHead).css({'top':(playerTime(e.pageY) / playerDuration) + "px"});	
+				
 		});
 		
 		
 		// mouse leave, Set scrub_head back to current time, fade out indicator time 
-		$(timeline).mouseleave(function() {
+		$('.timeline').mouseleave(function(e) {
 			timeDrag = false;
-			timelineUpdate();
+			updateTimeline(playerTime(e.pageY));
 			updateIndicator(0);
-				$(scrubHead).css({'top':0});
+			$(scrubHead).css({top:(playerTime / playerDuration) * $(timeline).height()});
 		});
 		
 		
 		$('.poi').css({'opacity':'1'}).hover(function() {
-			$(scrubHead).css({'opacity':'0'});
+			$(timeIndicator).css({top:$(this).css('top')});
+		});
+		
+		
+		//MOUSEENTER: POI
+		$('.poi').mouseenter(function() {
+			timeDrag = false;
+			$(timeIndicator).css({'background-color':'rgba(158,146,0,1.00)'});
+		});
+		$('.poi').mouseleave(function() {
+			timeDrag = false;
+			$(timeIndicator).css({'background-color':'rgba(193,34,36,1.00)'});
 		});
 		
 		
 		//MOUSEENTER: POI_EXPAND
-		$('.poi, .poi_expand, .time_indicator, p').mouseenter(function() {
+		$('.poi_expand, .time_indicator, p').mouseenter(function() {
 			timeDrag = false;
 			$(scrubHead).css({'opacity':'0'});
 			$(timeIndicator).fadeOut(200);	
@@ -576,18 +599,6 @@
 		
 		
 		
-		
-			$(window).on('scroll', function () {
-		
-				// Timeline Scroll Position
-				var scrollPosition = scrollTop / (docHeight - winHeight + 9);
-				var scrollProgress = 100 * (scrollPosition) + "%";
-				$(scrollIndicator).css({'top': scrollProgress});
-				console.log(scrollProgress);
-			});
-		
-		
-		
 		//CLICK: POI_EXPAND
 		//
 		$('.poi_expand').click(function(e) {
@@ -598,11 +609,18 @@
 				newProgress =  parseInt($(this).parent().css('top'), 10) / winHeight;
 				newCurrent = Math.floor( (playerDuration * newProgress) );
 				
-				timelineUpdate(newProgress);
+				updateTimeline(newProgress);
 				player[0].currentTime = newCurrent;
 				
 				$(this).parent().removeClass('poi_active').addClass('poi_viewed').find('.poi_expand').fadeOut(500);
 			}
+		});
+		
+		$(window).on('scroll', function () {
+		
+			// Timeline Scroll Position
+			var scrollPosition = (($(timeline).offset().top * ($(timeline).height()) / (docHeight - winHeight) )) - 2;
+			$(scrollIndicator).css({'top': scrollPosition});
 		});
 	
 		// MEDIA CONTROLS
@@ -613,13 +631,7 @@
 
 	
 	} // END mediaPlayer Function
-	
-	
-	
-	
-	
-	
-	
+		
 	
 	//CLICK: LOADPLAYER - INITIATE MEDIAPLAYER
 	$('.loadPlayer').click(function() {		
