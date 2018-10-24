@@ -11,10 +11,18 @@
 <!-- CONTENT --------------------------------------------------------------------------------------------------------------------------------------------->
     	<div id="container">
 			<ul>
-				<li><a href="#" class="loadPlayer" data-story="story1">Vernon's Story</a></li>
-				<li><a href="#" class="loadPlayer" data-story="story2">Ron and George's Story</a></li>
-				<li><a href="#" class="loadPlayer" data-story="story3">Mike's Story</a></li>
-				<li><a href="#" class="loadPlayer" data-story="story4">John's Story</a></li>
+                
+                <? 
+                    $stories = DB::getInstance()->query('SELECT * FROM story WHERE topic = 1');
+
+                    if($stories->count()) {
+                        foreach($stories->results() as $story) {
+                ?>
+                            <li><a href="#" class="loadPlayer"><? print($story->story_title); ?></a></li>
+                <?
+                        }
+                    }
+                ?>
 			</ul>
 		
 			<div class="backgroundMap"></div>

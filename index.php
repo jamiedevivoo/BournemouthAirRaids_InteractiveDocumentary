@@ -12,18 +12,18 @@
 
 
 <? 
-    $stories = DB::getInstance()->query('SELECT * FROM topic');
+    $topics = DB::getInstance()->query('SELECT * FROM topic');
 
-    if(!$stories->count()) {
+    if(!$topics->count()) {
         echo 'Error';
     } else {
-        foreach($stories->results() as $story) {
+        foreach($topics->results() as $topic) {
 ?>
-            <a href="#">
+            <a href="">
                 <div class="selectBox">
-                    <img src="<? print($story->cover_photo); ?>">
-                    <h2><? print($story->title); ?></h2>
-                    <p><? print($story->desc); ?></p>
+                    <img src="<? print($topic->cover_photo); ?>">
+                    <h2><? print($topic->title); ?></h2>
+                    <p><? print($topic->desc); ?></p>
                 </div>
             </a>
 <?
