@@ -9,5 +9,27 @@
 
     require 'includes/head.php';
 ?>		
+
+
+<? 
+    $stories = DB::getInstance()->query('SELECT * FROM topic');
+
+    if(!$stories->count()) {
+        echo 'Error';
+    } else {
+        foreach($stories->results() as $story) {
+?>
+            <a href="#">
+                <div class="selectBox">
+                    <img src="<? print($story->cover_photo); ?>">
+                    <h2><? print($story->title); ?></h2>
+                    <p><? print($story->desc); ?></p>
+                </div>
+            </a>
+<?
+        }
+    }
+?>
+
 	
 <?php include 'includes/foot.php'; ?>

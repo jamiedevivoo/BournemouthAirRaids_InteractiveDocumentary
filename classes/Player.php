@@ -2,12 +2,12 @@
 
 class Player {
     
-    class loadMedia() {
+    function loadMedia() {
         
     }
     
-    class reccomendedNext() {
-        
+    function reccomendedNext() {
         
     }
+    
 }
