@@ -16,3 +16,4 @@ $GLOBALS['config'] = array(
     require_once 'classes/DB.php';
     require_once 'classes/Story.php';
     require_once 'classes/Player.php';
+    require_once 'functions/sanitize.php';

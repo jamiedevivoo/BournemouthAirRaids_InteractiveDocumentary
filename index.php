@@ -19,7 +19,7 @@
     } else {
         foreach($topics->results() as $topic) {
 ?>
-            <a href="">
+            <a href="topic.php?id=<? print($topic->id); ?>">
                 <div class="selectBox">
                     <img src="<? print($topic->cover_photo); ?>">
                     <h2><? print($topic->title); ?></h2>

@@ -9,6 +9,24 @@
     require 'includes/head.php';
 ?>
 <!-- CONTENT --------------------------------------------------------------------------------------------------------------------------------------------->
+    <?
+        $story = $_GET["id"];
+        $story = DB::getInstance()->query("SELECT * FROM story WHERE id = '$story'");
+//      $story_teller = DB::getInstance()->query("SELECT * FROM story_teller WHERE id = '$story'");
+        
+        print_r($story);
+//        print_r($story_teller); 
+    ?>
+
+
+
+
+
+
+
+
+<br><br><br><Br>
+
     <section class="story" id="story2">
 
 			<div class="timeline">

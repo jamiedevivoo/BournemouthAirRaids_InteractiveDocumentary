@@ -4,8 +4,4 @@
     error_reporting(-1);
 
     require_once 'core/init.php';
-    $pagetitle = 'Stories';   
-
-    print($GLOBALS['sitename']);
-    print_r($GLOBALS['mysql']);
 ?>
