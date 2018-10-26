@@ -1,8 +1,9 @@
 <?
 
 class DB {
-
+    
     private static $_instance = null;
+        
     private $_pdo, 
             $_query,
             $_error = false,
@@ -11,7 +12,14 @@ class DB {
     
     function __construct() {
         try {
-            $this->_pdo = new PDO('mysql:host='.Config::get('mysql/host').';dbname='.Config::get('mysql/db'), Config::get('mysql/username'), Config::get('mysql/password'));
+            $dbconfig = parse_ini_file('../../../../private/dbconfig.ini.php');
+            $this->_pdo = new PDO(
+                    'mysql:
+                        host='.$dbconfig['db_host'].';
+                        dbname='.$dbconfig['db_name'], 
+                        $dbconfig['username'],
+                        $dbconfig['password']
+            );
             // echo "connected";
         } catch(PDOException $e) {
             die($e->getMessage());
