@@ -10,25 +10,29 @@
 ?>
 <!-- CONTENT --------------------------------------------------------------------------------------------------------------------------------------------->
     	<div id="container">
-			<ul>
-                
+            <h1 class="headerPrompt">Who's story do you want to explore?</h1>
+            <div class="selectBoxContainer">
                 <? 
                     $topic = $_GET["id"];
-                    $stories = DB::getInstance()->query("SELECT * FROM story WHERE topic_id = '$topic'");
+                    $story_tellers = DB::getInstance()->query("SELECT * FROM story_teller WHERE topic_id = '$topic'");
 
-                    if($stories->count()) {
-                        foreach($stories->results() as $story) {
+                    if($story_tellers->count()) {
+                        foreach($story_tellers->results() as $story_teller) {
                 ?>
-                            <li><a href="story.php?id=<? print($story->id); ?>" class="loadPlayer"><? print($story->title); ?></a><p><? print($story->summary); ?></p></li>
+                            <div class="selectBox">
+                                <a href="story.php?id=<? print($story_teller->id); ?>" class="loadPlayer">
+                                    <img class="cardImage" src="<? print('uploads/media/photo/story_teller_' . $story_teller->id . '.jpeg') ?>">
+                                    <h2><? print($story_teller->name); ?></h2>
+                                    <p><? print($story_teller->desc); ?></p>
+                                </a>        
+                            </div>
                 <?
                         }
                     }
                 ?>
-			</ul>
+            </div>
 		
 			<div class="backgroundMap"></div>
-			<h1>Bombing of Bournemouth | Sunday 23rd May 1943</h1>
-			<p class="prompt">Pick a Story to learn more.</p>
 	</div>
 
 <? require 'includes/foot.php'; ?>

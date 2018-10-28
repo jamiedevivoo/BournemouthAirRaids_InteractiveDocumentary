@@ -10,6 +10,8 @@
     require 'includes/head.php';
 ?>		
 
+<h1 class="headerPrompt">What topic do you want to explore?</h1>
+            <div class="selectBoxContainer">
 
 <? 
     $topics = DB::getInstance()->query('SELECT * FROM topic');
@@ -19,17 +21,17 @@
     } else {
         foreach($topics->results() as $topic) {
 ?>
-            <a href="topic.php?id=<? print($topic->id); ?>">
-                <div class="selectBox">
-                    <img src="<? print('uploads/media/photo/topic_' . $topic->id . '.jpeg') ?>">
+            <div class="selectBox">
+                <a href="topic.php?id=<? print($topic->id); ?>">
+                    <img class="cardImage" src="<? print('uploads/media/photo/topic_' . $topic->id . '.jpeg') ?>">
                     <h2><? print($topic->title); ?></h2>
                     <p><? print($topic->desc); ?></p>
-                </div>
-            </a>
+                </a>        
+            </div>
 <?
         }
     }
 ?>
+</div>
 
-	
 <?php include 'includes/foot.php'; ?>
