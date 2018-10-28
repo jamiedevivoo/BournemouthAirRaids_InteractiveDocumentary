@@ -14,12 +14,12 @@
                 
                 <? 
                     $topic = $_GET["id"];
-                    $stories = DB::getInstance()->query("SELECT * FROM story WHERE topic = '$topic'");
+                    $stories = DB::getInstance()->query("SELECT * FROM story WHERE topic_id = '$topic'");
 
                     if($stories->count()) {
                         foreach($stories->results() as $story) {
                 ?>
-                            <li><a href="story.php?id=<? print($story->id); ?>" class="loadPlayer"><? print($story->story_title); ?></a></li>
+                            <li><a href="story.php?id=<? print($story->id); ?>" class="loadPlayer"><? print($story->title); ?></a><p><? print($story->summary); ?></p></li>
                 <?
                         }
                     }

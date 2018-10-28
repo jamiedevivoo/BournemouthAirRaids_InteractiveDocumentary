@@ -21,7 +21,7 @@
 ?>
             <a href="topic.php?id=<? print($topic->id); ?>">
                 <div class="selectBox">
-                    <img src="<? print($topic->cover_photo); ?>">
+                    <img src="<? print('uploads/media/photo/topic_' . $topic->id . '.jpeg') ?>">
                     <h2><? print($topic->title); ?></h2>
                     <p><? print($topic->desc); ?></p>
                 </div>
